@@ -17,7 +17,7 @@ export const Hero: React.FC = () => {
               </p>
               <div className="flex space-x-8 font-mono text-base">
                 <div className="flex flex-col">
-                  <span className="text-4xl font-bold text-accent font-mono">240+</span>
+                  <span className="text-4xl font-bold text-accent font-mono">230</span>
                   <span className="text-ink/60 uppercase text-xs tracking-widest mt-2 font-bold">Grants</span>
                 </div>
                 <div className="w-[1px] h-full bg-ink/10"></div>
