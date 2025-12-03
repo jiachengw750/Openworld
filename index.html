@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catalyst | Funding Science</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://font.sec.miui.com/font/1.1/MiSans.css" />
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          // Strictly define font families to limit to 3 primary fonts
+          fontFamily: {
+            sans: ['MiSans', 'Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          extend: {
+            colors: {
+              'paper': 'rgb(var(--color-paper) / <alpha-value>)',
+              'ink': 'rgb(var(--color-ink) / <alpha-value>)',
+              'accent': 'rgb(var(--color-accent) / <alpha-value>)',
+              'stone': 'rgb(var(--color-stone) / <alpha-value>)',
+              'surface': 'rgb(var(--color-surface) / <alpha-value>)',
+            },
+            backgroundImage: {
+              'grid-pattern': "linear-gradient(to right, rgba(var(--color-ink), 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(var(--color-ink), 0.05) 1px, transparent 1px)",
+            },
+            animation: {
+              'shimmer': 'shimmer 2s linear infinite',
+            },
+            keyframes: {
+              shimmer: {
+                '0%': { backgroundPosition: '200% 0' },
+                '100%': { backgroundPosition: '-200% 0' }
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      :root {
+        /* Light Theme */
+        --color-paper: 248 248 248;   /* # v */
+        --color-ink: 15 23 42;        /* Slate 900 */
+        --color-accent: 0 0 0;        /* Black Brand Color */
+        --color-stone: 203 213 225;   /* Slate 300 */
+        --color-surface: 255 255 255; /* White */
+      }
+      
+      .dark {
+        /* Pure Black Theme */
+        --color-paper: 0 0 0;         /* Pure Black */
+        --color-ink: 255 255 255;     /* Pure White */
+        --color-accent: 255 255 255;  /* White Brand Color (Inverted) */
+        --color-stone: 51 51 51;      /* Neutral 800 */
+        --color-surface: 12 12 12;    /* Almost Black */
+      }
+
+      body {
+        background-color: rgb(var(--color-paper));
+        color: rgb(var(--color-ink));
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        transition: background-color 0.3s ease, color 0.3s ease;
+         font-family: 'MiSans', 'Inter', sans-serif;
+      }
+      /* Custom scrollbar for editorial feel */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: rgb(var(--color-paper));
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgb(var(--color-stone));
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgb(var(--color-accent));
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.6"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
