@@ -92,7 +92,7 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest }) => {
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between h-10">
                 <div className="flex items-center gap-3">
                     <img src={quest.author.avatar} alt={quest.author.name} className="w-8 h-8 rounded-full bg-stone/10 border border-ink/10" />
                     <div className="flex items-center gap-1">
@@ -102,30 +102,32 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest }) => {
                     </div>
                 </div>
 
-                <div className="flex items-center gap-4">
-                    {/* Bidders Pile */}
-                    <div className="flex -space-x-2">
-                        {quest.bidders.slice(0, 3).map((url, i) => (
-                            <img key={i} src={url} className="w-6 h-6 rounded-full border border-paper" alt="bidder" />
-                        ))}
+                {/* Interactive Right Side: Swaps content on hover */}
+                <div className="relative h-full flex items-center justify-end min-w-[200px]">
+                    {/* Default View: Bidders & Comments */}
+                    <div className="flex items-center gap-4 transition-all duration-300 group-hover:opacity-0 group-hover:translate-x-4 absolute right-0">
+                        <div className="flex -space-x-2">
+                            {quest.bidders.slice(0, 3).map((url, i) => (
+                                <img key={i} src={url} className="w-6 h-6 rounded-full border border-paper" alt="bidder" />
+                            ))}
+                        </div>
+                        {quest.bidderCount > 0 && (
+                            <span className="text-xs font-mono font-bold text-ink/50">{quest.bidderCount}+ Bidders</span>
+                        )}
+                        
+                        <div className="flex items-center gap-1.5 bg-ink text-paper px-3 py-1.5 rounded-full">
+                             <MessageSquare size={12} fill="currentColor" />
+                             <span className="text-xs font-bold font-mono">{quest.commentsCount}</span>
+                        </div>
                     </div>
-                    {quest.bidderCount > 0 && (
-                        <span className="text-xs font-mono font-bold text-ink/50">{quest.bidderCount}+ Bidder count</span>
-                    )}
-                    
-                    {/* Comment bubble styled like button */}
-                    <div className="flex items-center gap-1.5 bg-ink text-paper px-3 py-1.5 rounded-full">
-                         <MessageSquare size={12} fill="currentColor" />
-                         <span className="text-xs font-bold font-mono">{quest.commentsCount}</span>
+
+                    {/* Hover View: Action Button */}
+                    <div className="absolute right-0 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-0 translate-x-4 pointer-events-none group-hover:pointer-events-auto">
+                         <button className="bg-ink text-paper pl-4 pr-3 py-2 rounded-sm font-mono text-xs font-bold uppercase tracking-widest flex items-center shadow-sm hover:bg-accent transition-colors whitespace-nowrap">
+                            Request Access <ArrowRight size={14} className="ml-2" />
+                         </button>
                     </div>
                 </div>
-            </div>
-
-            {/* Hover Action Overlay (Subtle) */}
-            <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                 <button className="bg-accent text-paper pl-4 pr-3 py-2 rounded-sm font-mono text-xs font-bold uppercase tracking-widest flex items-center shadow-xl">
-                    Request Access <ArrowRight size={14} className="ml-2" />
-                 </button>
             </div>
         </Link>
     );

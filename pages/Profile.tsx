@@ -164,7 +164,8 @@ export const Profile: React.FC = () => {
           { label: "Cutting-Edge", count: 8 },
           { label: "Open-Minded", count: 7 },
           { label: "Professionalism", count: 6 },
-      ]
+      ],
+      fieldsOfStudy: ['Medical AI', 'Deep Learning', 'Precision Medicine', 'Medical Imaging']
   });
 
   // -- Edit Profile Modal State --
@@ -172,6 +173,10 @@ export const Profile: React.FC = () => {
   const [editFormData, setEditFormData] = useState(profileData);
   const [isTagInputActive, setIsTagInputActive] = useState(false);
   const [newTagInput, setNewTagInput] = useState('');
+
+  // -- Fields of Study Input State (Sidebar) --
+  const [isFieldInputActive, setIsFieldInputActive] = useState(false);
+  const [newFieldInput, setNewFieldInput] = useState('');
 
   // Effect to sync wallet if connected (optional, but good for demo)
   useEffect(() => {
@@ -286,6 +291,25 @@ export const Profile: React.FC = () => {
       setEditFormData(prev => ({ ...prev, tags: newTags }));
   };
 
+  // -- Sidebar Field Handlers --
+  const handleAddField = () => {
+      if (newFieldInput.trim()) {
+          setProfileData(prev => ({
+              ...prev,
+              fieldsOfStudy: [...prev.fieldsOfStudy, newFieldInput.trim()]
+          }));
+          setNewFieldInput('');
+          setIsFieldInputActive(false);
+      }
+  };
+
+  const handleRemoveField = (index: number) => {
+      setProfileData(prev => ({
+          ...prev,
+          fieldsOfStudy: prev.fieldsOfStudy.filter((_, i) => i !== index)
+      }));
+  };
+
   const shimmerClass = "bg-gradient-to-r from-stone-200 via-stone-50 to-stone-200 bg-[length:400%_100%] animate-shimmer";
 
   if (isLoading) {
@@ -365,9 +389,6 @@ export const Profile: React.FC = () => {
 
                     {/* RIGHT COLUMN SKELETON */}
                     <div className="lg:col-span-4 space-y-10">
-                        {/* Settings Button */}
-                        <div className={`w-full h-14 border border-ink/5 rounded-sm ${shimmerClass}`}></div>
-
                         {/* LEX Score Card */}
                         <div className="h-64 bg-stone-50 border border-ink/5 p-8 flex flex-col justify-between">
                             <div className={`h-4 w-24 rounded ${shimmerClass}`}></div>
@@ -754,15 +775,6 @@ export const Profile: React.FC = () => {
                 {/* RIGHT COLUMN: Sidebar Widgets (4 cols) */}
                 <div className="lg:col-span-4 space-y-10">
                     
-                    {/* 1. Account Settings Button */}
-                    <Link 
-                        to="/settings" 
-                        className="flex items-center justify-center w-full py-5 border border-ink/10 bg-surface hover:bg-stone/5 transition-colors font-mono text-sm font-bold uppercase tracking-widest text-ink group shadow-sm"
-                    >
-                        <Settings size={16} className="mr-3 group-hover:rotate-90 transition-transform text-ink/60 group-hover:text-ink"/>
-                        Account Settings
-                    </Link>
-
                     {/* 2. LEX Score Card */}
                     <div className="bg-stone/5 p-8 border border-ink/5 relative overflow-hidden">
                         <div className="flex items-center space-x-2 text-ink mb-6">
@@ -787,15 +799,54 @@ export const Profile: React.FC = () => {
                         </button>
                     </div>
 
-                    {/* 3. Fields of Study */}
+                    {/* 3. Fields of Study (Interactive) */}
                     <div>
                         <h3 className="font-sans text-xl font-bold text-ink mb-5">Fields of Study</h3>
                         <div className="flex flex-wrap gap-2">
-                            {['Medical AI', 'Deep Learning', 'Precision Medicine', 'Medical Imaging'].map(tag => (
-                                <span key={tag} className="px-4 py-2 bg-stone/10 hover:bg-stone/20 transition-colors border border-transparent hover:border-ink/10 rounded-full text-xs font-mono font-bold text-ink/70 cursor-default">
-                                    {tag}
-                                </span>
+                            {profileData.fieldsOfStudy.map((tag, idx) => (
+                                <div key={idx} className="group relative">
+                                    <span className="px-4 py-2 bg-stone/10 hover:bg-stone/20 transition-colors border border-transparent hover:border-ink/10 rounded-full text-xs font-mono font-bold text-ink/70 cursor-default flex items-center">
+                                        {tag}
+                                        <button 
+                                            onClick={() => handleRemoveField(idx)}
+                                            className="ml-2 text-ink/40 hover:text-red-500 hidden group-hover:block transition-colors"
+                                        >
+                                            <X size={12} />
+                                        </button>
+                                    </span>
+                                </div>
                             ))}
+                            
+                            {/* Add Button / Input */}
+                            {isFieldInputActive ? (
+                                <div className="flex items-center gap-1 bg-white border-2 border-ink/20 rounded-full px-3 py-1.5 h-[34px] shadow-sm animate-in fade-in zoom-in-95 duration-200">
+                                    <input 
+                                        type="text" 
+                                        value={newFieldInput}
+                                        onChange={(e) => setNewFieldInput(e.target.value)}
+                                        className="w-24 text-xs font-mono font-bold outline-none bg-transparent text-ink placeholder-ink/30"
+                                        placeholder="New..."
+                                        autoFocus
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') handleAddField();
+                                            if (e.key === 'Escape') setIsFieldInputActive(false);
+                                        }}
+                                    />
+                                    <div className="w-px h-3 bg-ink/10 mx-1"></div>
+                                    <button onClick={handleAddField} className="text-green-600 hover:text-green-700 hover:bg-green-50 rounded-full p-0.5"><Check size={12} /></button>
+                                    <button onClick={() => setIsFieldInputActive(false)} className="text-red-500 hover:text-red-600 hover:bg-red-50 rounded-full p-0.5"><X size={12} /></button>
+                                </div>
+                            ) : (
+                                <button 
+                                    onClick={() => {
+                                        setIsFieldInputActive(true);
+                                        setNewFieldInput('');
+                                    }}
+                                    className="px-3 py-2 bg-stone/5 border border-dashed border-ink/20 hover:border-ink/40 rounded-full text-xs font-mono font-bold text-ink/40 hover:text-ink transition-all flex items-center gap-1 h-[34px]"
+                                >
+                                    <Plus size={12} /> Add
+                                </button>
+                            )}
                         </div>
                     </div>
 
