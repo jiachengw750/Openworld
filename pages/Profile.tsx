@@ -440,50 +440,6 @@ export const Profile: React.FC = () => {
                                 </div>
                                 <p className="text-lg text-ink/50 font-sans mb-1">{profileData.role}</p>
                                 <p className="text-lg text-ink/50 font-sans">{profileData.institution}</p>
-
-                                {/* Fields of Study - Directly below Identity */}
-                                <div className="mt-4 flex flex-wrap gap-2 items-center">
-                                    {profileData.fieldsOfStudy.map((field, index) => (
-                                        <div key={index} className="group flex items-center bg-stone-100 text-ink px-3 py-1 rounded-full text-xs font-medium border border-ink/10 hover:border-ink/30 transition-all cursor-default">
-                                            {field}
-                                            <button
-                                                onClick={() => handleRemoveField(index)}
-                                                className="ml-2 text-ink/40 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                                            >
-                                                <X size={12} />
-                                            </button>
-                                        </div>
-                                    ))}
-                                    {isFieldInputActive ? (
-                                        <div className="flex items-center gap-1 bg-white border border-ink/20 rounded-full px-3 py-1 shadow-sm">
-                                            <input
-                                                type="text"
-                                                value={newFieldInput}
-                                                onChange={(e) => setNewFieldInput(e.target.value)}
-                                                className="w-24 text-xs outline-none bg-transparent"
-                                                placeholder="Add field..."
-                                                autoFocus
-                                                onKeyDown={(e) => {
-                                                    if (e.key === 'Enter') handleAddField();
-                                                    if (e.key === 'Escape') setIsFieldInputActive(false);
-                                                }}
-                                            />
-                                            <button onClick={handleAddField} className="text-green-600 hover:bg-green-50 rounded-full p-0.5"><Check size={12} /></button>
-                                            <button onClick={() => setIsFieldInputActive(false)} className="text-red-500 hover:bg-red-50 rounded-full p-0.5"><X size={12} /></button>
-                                        </div>
-                                    ) : (
-                                        <button
-                                            onClick={() => {
-                                                setIsFieldInputActive(true);
-                                                setNewFieldInput('');
-                                            }}
-                                            className="flex items-center justify-center w-6 h-6 rounded-full border border-ink/20 text-ink/40 hover:text-ink hover:border-ink transition-colors"
-                                            title="Add Field of Study"
-                                        >
-                                            <Plus size={14} />
-                                        </button>
-                                    )}
-                                </div>
                             </div>
                             
                             <button 
@@ -495,8 +451,52 @@ export const Profile: React.FC = () => {
                         </div>
 
                         {/* Bio - Full Width */}
-                        <div className="relative z-10 mb-10 w-full">
+                        <div className="relative z-10 mb-6 w-full">
                             <p className="text-lg text-ink/80 leading-relaxed font-sans w-full">{profileData.bio}</p>
+                        </div>
+
+                        {/* Fields of Study - Below Bio, Left Aligned */}
+                        <div className="relative z-10 mb-8 flex flex-wrap gap-2 items-center w-full justify-start">
+                            {profileData.fieldsOfStudy.map((field, index) => (
+                                <div key={index} className="group flex items-center bg-stone-100 text-ink px-3 py-1 rounded-full text-xs font-medium border border-ink/10 hover:border-ink/30 transition-all cursor-default">
+                                    {field}
+                                    <button
+                                        onClick={() => handleRemoveField(index)}
+                                        className="ml-2 text-ink/40 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                                    >
+                                        <X size={12} />
+                                    </button>
+                                </div>
+                            ))}
+                            {isFieldInputActive ? (
+                                <div className="flex items-center gap-1 bg-white border border-ink/20 rounded-full px-3 py-1 shadow-sm">
+                                    <input
+                                        type="text"
+                                        value={newFieldInput}
+                                        onChange={(e) => setNewFieldInput(e.target.value)}
+                                        className="w-24 text-xs outline-none bg-transparent"
+                                        placeholder="Add field..."
+                                        autoFocus
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') handleAddField();
+                                            if (e.key === 'Escape') setIsFieldInputActive(false);
+                                        }}
+                                    />
+                                    <button onClick={handleAddField} className="text-green-600 hover:bg-green-50 rounded-full p-0.5"><Check size={12} /></button>
+                                    <button onClick={() => setIsFieldInputActive(false)} className="text-red-500 hover:bg-red-50 rounded-full p-0.5"><X size={12} /></button>
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={() => {
+                                        setIsFieldInputActive(true);
+                                        setNewFieldInput('');
+                                    }}
+                                    className="flex items-center justify-center w-6 h-6 rounded-full border border-ink/20 text-ink/40 hover:text-ink hover:border-ink transition-colors"
+                                    title="Add Field of Study"
+                                >
+                                    <Plus size={14} />
+                                </button>
+                            )}
                         </div>
 
                         {/* Social Links */}
