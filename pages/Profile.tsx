@@ -7,11 +7,13 @@ import {
   BadgeCheck, Award, GraduationCap, Fingerprint, 
   Plus, Trash2, X, Save, BookOpen, MessageSquare,
   Hourglass, Sparkles, User, ThumbsUp, EyeOff, ArrowUpToLine,
-  Star, Image as ImageIcon, Camera, Upload, Check, Eye
+  Star, Image as ImageIcon, Camera, Upload, Check, Eye, Calendar
 } from 'lucide-react';
 import { useWallet } from '../context/WalletContext';
 import { useToast } from '../context/ToastContext';
 import { PROJECTS } from '../constants';
+import { EditProfileModal } from '../components/modals/EditProfileModal';
+import { AddStoryModal } from '../components/modals/AddStoryModal';
 
 // Types for the Story/Timeline
 interface StoryItem {
@@ -144,11 +146,6 @@ export const Profile: React.FC = () => {
   const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
   const [editingStory, setEditingStory] = useState<StoryItem | null>(null);
   
-  // Story Form State
-  const [formDate, setFormDate] = useState('');
-  const [formTitle, setFormTitle] = useState('');
-  const [formDesc, setFormDesc] = useState('');
-
   // -- Profile Data State --
   const [profileData, setProfileData] = useState({
       name: "Zhang Wei",
@@ -157,28 +154,25 @@ export const Profile: React.FC = () => {
       avatar: "https://i.pravatar.cc/300?u=zhangwei",
       banner: "https://picsum.photos/seed/science_banner/1200/400",
       bio: "Specializing in Medical Artificial Intelligence and the application of deep learning in medical imaging diagnostics. Dedicated to advancing the innovation and application of AI technologies in precision medicine, with over 50 SCI-indexed publications and leadership in three National Natural Science Foundation of China projects.",
-      tags: [
-          { label: "Innovation", count: 15 },
-          { label: "Rigor", count: 12 },
-          { label: "Collaboration", count: 10 },
-          { label: "Cutting-Edge", count: 8 },
-          { label: "Open-Minded", count: 7 },
-          { label: "Professionalism", count: 6 },
-      ],
+      joinDate: "Jul, 2020",
+      // These are managed inline on the profile page
+      researchFields: ['Medical AI', 'Deep Learning', 'Precision Medicine', 'Medical Imaging'],
+      subjects: ['Quantum mechanic', 'Introduction to Mathematics'],
+      // Kept for modal compatibility if needed, though we primarily use the above two now
       fieldsOfStudy: ['Medical AI', 'Deep Learning', 'Precision Medicine', 'Medical Imaging']
   });
 
   // -- Edit Profile Modal State --
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [editFormData, setEditFormData] = useState(profileData);
-  const [isTagInputActive, setIsTagInputActive] = useState(false);
-  const [newTagInput, setNewTagInput] = useState('');
 
-  // -- Fields of Study Input State --
-  const [isFieldInputActive, setIsFieldInputActive] = useState(false);
-  const [newFieldInput, setNewFieldInput] = useState('');
+  // -- Inline Tag Editing State --
+  const [isAddingResearch, setIsAddingResearch] = useState(false);
+  const [researchInput, setResearchInput] = useState('');
+  const [isAddingSubject, setIsAddingSubject] = useState(false);
+  const [subjectInput, setSubjectInput] = useState('');
 
-  // Effect to sync wallet if connected (optional, but good for demo)
+  // Effect to sync wallet if connected
   useEffect(() => {
       if (wallet?.connected) {
           setProfileData(prev => ({
@@ -189,7 +183,6 @@ export const Profile: React.FC = () => {
       }
   }, [wallet]);
 
-  // Simulate loading effect on mount
   useEffect(() => {
     const timer = setTimeout(() => {
         setIsLoading(false);
@@ -203,17 +196,11 @@ export const Profile: React.FC = () => {
 
   const handleOpenAddStory = () => {
       setEditingStory(null);
-      setFormDate('');
-      setFormTitle('');
-      setFormDesc('');
       setIsStoryModalOpen(true);
   };
 
   const handleOpenEditStory = (item: StoryItem) => {
       setEditingStory(item);
-      setFormDate(item.date);
-      setFormTitle(item.title);
-      setFormDesc(item.description);
       setIsStoryModalOpen(true);
   };
 
@@ -224,25 +211,17 @@ export const Profile: React.FC = () => {
       }
   };
 
-  const handleSaveStory = () => {
-      if (!formDate || !formTitle) {
-          showToast('Please fill in Date and Title');
-          return;
-      }
-
+  const handleSaveStory = (data: { time: string; title: string; description: string }) => {
       if (editingStory) {
-          // Update
-          setStories(prev => prev.map(s => s.id === editingStory.id ? { ...s, date: formDate, title: formTitle, description: formDesc } : s));
+          setStories(prev => prev.map(s => s.id === editingStory.id ? { ...s, date: data.time, title: data.title, description: data.description } : s));
           showToast('Entry updated');
       } else {
-          // Create
           const newStory: StoryItem = {
               id: Date.now().toString(),
-              date: formDate,
-              title: formTitle,
-              description: formDesc
+              date: data.time,
+              title: data.title,
+              description: data.description
           };
-          // Add to top
           setStories(prev => [newStory, ...prev]);
           showToast('New entry added');
       }
@@ -259,7 +238,6 @@ export const Profile: React.FC = () => {
 
   const handleToggleHide = (id: string) => {
        setIdaArticles(prev => prev.map(item => item.id === id ? { ...item, isHidden: !item.isHidden } : item));
-       // showToast('Article visibility updated');
   };
 
   // -- Profile Edit Handlers --
@@ -268,45 +246,46 @@ export const Profile: React.FC = () => {
       setIsEditProfileOpen(true);
   };
 
-  const handleSaveProfile = () => {
-      setProfileData(editFormData);
+  const handleSaveProfile = (data: typeof profileData) => {
+      setProfileData(data);
       setIsEditProfileOpen(false);
       showToast('Profile updated successfully');
   };
 
-  const handleAddTag = () => {
-      if (newTagInput.trim()) {
-          setEditFormData(prev => ({
-              ...prev,
-              tags: [...prev.tags, { label: newTagInput.trim(), count: 1 }]
-          }));
-          setNewTagInput('');
-          setIsTagInputActive(false);
-      }
-  };
-
-  const handleRemoveTag = (index: number) => {
-      const newTags = [...editFormData.tags];
-      newTags.splice(index, 1);
-      setEditFormData(prev => ({ ...prev, tags: newTags }));
-  };
-
-  // -- Sidebar Field Handlers --
-  const handleAddField = () => {
-      if (newFieldInput.trim()) {
+  // -- Inline Tag Handlers --
+  const handleAddResearchField = () => {
+      if (researchInput.trim()) {
           setProfileData(prev => ({
               ...prev,
-              fieldsOfStudy: [...prev.fieldsOfStudy, newFieldInput.trim()]
+              researchFields: [...prev.researchFields, researchInput.trim()]
           }));
-          setNewFieldInput('');
-          setIsFieldInputActive(false);
+          setResearchInput('');
+          setIsAddingResearch(false);
       }
   };
 
-  const handleRemoveField = (index: number) => {
+  const handleRemoveResearchField = (index: number) => {
       setProfileData(prev => ({
           ...prev,
-          fieldsOfStudy: prev.fieldsOfStudy.filter((_, i) => i !== index)
+          researchFields: prev.researchFields.filter((_, i) => i !== index)
+      }));
+  };
+
+  const handleAddSubject = () => {
+      if (subjectInput.trim()) {
+          setProfileData(prev => ({
+              ...prev,
+              subjects: [...prev.subjects, subjectInput.trim()]
+          }));
+          setSubjectInput('');
+          setIsAddingSubject(false);
+      }
+  };
+
+  const handleRemoveSubject = (index: number) => {
+      setProfileData(prev => ({
+          ...prev,
+          subjects: prev.subjects.filter((_, i) => i !== index)
       }));
   };
 
@@ -324,69 +303,27 @@ export const Profile: React.FC = () => {
 
             <div className="max-w-[1512px] mx-auto px-6 md:px-12 pb-12 mt-8">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-                    
-                    {/* FULL COLUMN SKELETON */}
                     <div className="lg:col-span-12">
-                        
                         {/* Profile Header Card Skeleton */}
                         <div className="bg-surface border border-ink/5 rounded-sm mb-12 p-8 md:p-12 relative overflow-hidden h-[420px]">
-                            {/* Banner Shimmer */}
                             <div className="absolute inset-0 bg-stone-100/50">
                                 <div className={`absolute inset-0 opacity-50 ${shimmerClass}`}></div>
                             </div>
-                            
                             <div className="relative z-10 mt-32 flex flex-col md:flex-row items-start gap-6">
-                                {/* Avatar */}
                                 <div className={`w-28 h-28 rounded-full border-4 border-white shrink-0 ${shimmerClass}`}></div>
-                                {/* Info */}
                                 <div className="flex-1 pt-4 space-y-3">
                                     <div className={`h-8 w-48 rounded ${shimmerClass}`}></div>
                                     <div className={`h-4 w-32 rounded ${shimmerClass}`}></div>
                                     <div className={`h-4 w-40 rounded ${shimmerClass}`}></div>
                                 </div>
-                                {/* Edit Button Placeholder */}
                                 <div className={`w-24 h-8 rounded-full mt-4 md:mt-0 ${shimmerClass}`}></div>
                             </div>
-
-                            {/* Bio Lines */}
                             <div className="relative z-10 mt-8 space-y-2 max-w-2xl">
                                 <div className={`h-4 w-full rounded ${shimmerClass}`}></div>
                                 <div className={`h-4 w-5/6 rounded ${shimmerClass}`}></div>
-                                <div className={`h-4 w-4/6 rounded ${shimmerClass}`}></div>
                             </div>
                         </div>
-
-                        {/* Tabs Skeleton */}
-                        <div className="flex gap-8 mb-10 border-b border-ink/5 pb-4">
-                            {[1, 2, 3, 4].map((i) => (
-                                <div key={i} className="flex items-center gap-2">
-                                    <div className={`w-4 h-4 rounded-full ${shimmerClass}`}></div>
-                                    <div className={`h-4 w-16 rounded ${shimmerClass}`}></div>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* List Content Skeleton */}
-                        <div className="space-y-12">
-                            {[1, 2, 3].map((i) => (
-                                <div key={i} className="flex flex-col md:flex-row gap-6 md:gap-12">
-                                    {/* Date Column */}
-                                    <div className="w-24 shrink-0">
-                                        <div className={`h-4 w-16 rounded ${shimmerClass}`}></div>
-                                    </div>
-                                    {/* Content Column */}
-                                    <div className="flex-1 space-y-3">
-                                        <div className={`h-6 w-3/4 rounded ${shimmerClass}`}></div>
-                                        <div className="space-y-2">
-                                            <div className={`h-4 w-full rounded ${shimmerClass}`}></div>
-                                            <div className={`h-4 w-5/6 rounded ${shimmerClass}`}></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -413,7 +350,7 @@ export const Profile: React.FC = () => {
                     
                     {/* --- PROFILE HEADER BLOCK --- */}
                     <div className="bg-surface border border-ink/10 rounded-sm mb-12 p-8 md:p-12 relative overflow-hidden shadow-sm group">
-                        {/* Banner Background (Dynamic) */}
+                        {/* Banner Background */}
                         <div className="absolute inset-0 z-0">
                             {profileData.banner ? (
                                 <img src={profileData.banner} alt="Banner" className="w-full h-full object-cover opacity-20" />
@@ -424,7 +361,7 @@ export const Profile: React.FC = () => {
                         </div>
 
                         {/* Identity */}
-                        <div className="relative z-10 flex flex-col md:flex-row items-start gap-6 mb-10">
+                        <div className="relative z-10 flex flex-col md:flex-row items-start gap-6 mb-6">
                             <div className="w-28 h-28 rounded-full border-4 border-white shadow-md overflow-hidden shrink-0 bg-stone-200">
                                 <img src={profileData.avatar} alt={profileData.name} className="w-full h-full object-cover" />
                             </div>
@@ -450,53 +387,98 @@ export const Profile: React.FC = () => {
                             </button>
                         </div>
 
+                        {/* NEW: Research Fields & Subjects (Interactive Rows) */}
+                        <div className="relative z-10 mb-8 space-y-4">
+                            
+                            {/* Row 1: Research Fields (Outline Style) */}
+                            <div className="flex flex-wrap items-center gap-2">
+                                {profileData.researchFields.map((field, idx) => (
+                                    <span key={idx} className="px-4 py-2 rounded-full border border-ink/20 bg-paper text-sm font-sans text-ink flex items-center gap-2 transition-all hover:border-ink/40 group/tag">
+                                        {field}
+                                        <X 
+                                            size={14} 
+                                            className="text-ink/30 hover:text-red-500 cursor-pointer opacity-0 group-hover/tag:opacity-100 transition-opacity"
+                                            onClick={() => handleRemoveResearchField(idx)}
+                                        />
+                                    </span>
+                                ))}
+                                
+                                {isAddingResearch ? (
+                                    <div className="flex items-center border border-ink/20 rounded-full px-3 py-1.5 bg-white">
+                                        <input 
+                                            type="text" 
+                                            className="outline-none text-sm w-32 bg-transparent"
+                                            autoFocus
+                                            value={researchInput}
+                                            onChange={(e) => setResearchInput(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') handleAddResearchField();
+                                                if (e.key === 'Escape') setIsAddingResearch(false);
+                                            }}
+                                            onBlur={() => { if(!researchInput) setIsAddingResearch(false) }}
+                                        />
+                                        <button onClick={handleAddResearchField} className="ml-1 text-green-600 hover:text-green-700"><Check size={14}/></button>
+                                    </div>
+                                ) : (
+                                    <button 
+                                        onClick={() => setIsAddingResearch(true)}
+                                        className="w-8 h-8 rounded-full border border-ink/20 flex items-center justify-center text-ink/60 hover:bg-stone/5 hover:text-ink transition-colors"
+                                    >
+                                        <Plus size={16} />
+                                    </button>
+                                )}
+                            </div>
+
+                            {/* Row 2: Subjects (Filled Style) */}
+                            <div className="flex flex-wrap items-center gap-2">
+                                {profileData.subjects.map((subject, idx) => (
+                                    <span key={idx} className="px-4 py-2 rounded-full bg-stone-100 text-sm font-sans text-ink flex items-center gap-2 transition-all hover:bg-stone-200 group/tag">
+                                        {subject}
+                                        <X 
+                                            size={14} 
+                                            className="text-ink/30 hover:text-red-500 cursor-pointer opacity-0 group-hover/tag:opacity-100 transition-opacity"
+                                            onClick={() => handleRemoveSubject(idx)}
+                                        />
+                                    </span>
+                                ))}
+
+                                {isAddingSubject ? (
+                                    <div className="flex items-center bg-stone-100 rounded-full px-3 py-1.5">
+                                        <input 
+                                            type="text" 
+                                            className="outline-none text-sm w-32 bg-transparent"
+                                            autoFocus
+                                            value={subjectInput}
+                                            onChange={(e) => setSubjectInput(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') handleAddSubject();
+                                                if (e.key === 'Escape') setIsAddingSubject(false);
+                                            }}
+                                            onBlur={() => { if(!subjectInput) setIsAddingSubject(false) }}
+                                        />
+                                        <button onClick={handleAddSubject} className="ml-1 text-green-600 hover:text-green-700"><Check size={14}/></button>
+                                    </div>
+                                ) : (
+                                    <button 
+                                        onClick={() => setIsAddingSubject(true)}
+                                        className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-ink/60 hover:bg-stone-200 hover:text-ink transition-colors"
+                                    >
+                                        <Plus size={16} />
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+
                         {/* Bio - Full Width */}
                         <div className="relative z-10 mb-6 w-full">
                             <p className="text-lg text-ink/80 leading-relaxed font-sans w-full">{profileData.bio}</p>
                         </div>
 
-                        {/* Fields of Study - Below Bio, Left Aligned */}
-                        <div className="relative z-10 mb-8 flex flex-wrap gap-2 items-center w-full justify-start">
-                            {profileData.fieldsOfStudy.map((field, index) => (
-                                <div key={index} className="group flex items-center bg-stone-100 text-ink px-3 py-1 rounded-full text-xs font-medium border border-ink/10 hover:border-ink/30 transition-all cursor-default">
-                                    {field}
-                                    <button
-                                        onClick={() => handleRemoveField(index)}
-                                        className="ml-2 text-ink/40 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                                    >
-                                        <X size={12} />
-                                    </button>
-                                </div>
-                            ))}
-                            {isFieldInputActive ? (
-                                <div className="flex items-center gap-1 bg-white border border-ink/20 rounded-full px-3 py-1 shadow-sm">
-                                    <input
-                                        type="text"
-                                        value={newFieldInput}
-                                        onChange={(e) => setNewFieldInput(e.target.value)}
-                                        className="w-24 text-xs outline-none bg-transparent"
-                                        placeholder="Add field..."
-                                        autoFocus
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter') handleAddField();
-                                            if (e.key === 'Escape') setIsFieldInputActive(false);
-                                        }}
-                                    />
-                                    <button onClick={handleAddField} className="text-green-600 hover:bg-green-50 rounded-full p-0.5"><Check size={12} /></button>
-                                    <button onClick={() => setIsFieldInputActive(false)} className="text-red-500 hover:bg-red-50 rounded-full p-0.5"><X size={12} /></button>
-                                </div>
-                            ) : (
-                                <button
-                                    onClick={() => {
-                                        setIsFieldInputActive(true);
-                                        setNewFieldInput('');
-                                    }}
-                                    className="flex items-center justify-center w-6 h-6 rounded-full border border-ink/20 text-ink/40 hover:text-ink hover:border-ink transition-colors"
-                                    title="Add Field of Study"
-                                >
-                                    <Plus size={14} />
-                                </button>
-                            )}
+                        {/* Date Joined Section */}
+                        <div className="relative z-10 flex items-center gap-3 mb-8">
+                            <Calendar size={16} className="text-ink" />
+                            <span className="text-sm font-mono font-bold text-ink uppercase tracking-widest">Date Joined</span>
+                            <span className="text-sm font-mono font-bold text-ink">{profileData.joinDate}</span>
                         </div>
 
                         {/* Social Links */}
@@ -549,21 +531,14 @@ export const Profile: React.FC = () => {
                                 <div className="relative border-l border-ink/10 ml-5 space-y-12 pb-12">
                                     {stories.map((story) => (
                                         <div key={story.id} className="relative pl-12 group">
-                                            {/* Dot */}
                                             <div className="absolute -left-[5px] top-2 w-[11px] h-[11px] rounded-full bg-ink border-2 border-paper ring-4 ring-paper z-10"></div>
-                                            
-                                            {/* Content Container */}
                                             <div className="bg-transparent group-hover:bg-stone/5 -m-6 p-6 rounded-sm transition-colors relative">
-                                                
                                                 <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-8 mb-2">
                                                     <span className="font-mono text-sm font-bold text-ink shrink-0 min-w-[100px]">{story.date}</span>
                                                     <h4 className="font-sans text-xl font-bold text-ink leading-tight">{story.title}</h4>
                                                 </div>
-                                                
                                                 <div className="md:pl-[132px]">
                                                     <p className="text-ink/60 font-sans leading-relaxed text-base mb-4">{story.description}</p>
-                                                    
-                                                    {/* Hover Actions */}
                                                     <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
                                                         <button 
                                                             onClick={() => handleDeleteStory(story.id)}
@@ -595,13 +570,10 @@ export const Profile: React.FC = () => {
                                         const percent = Math.min(100, Math.round((project.raised / project.goal) * 100));
                                         return (
                                             <div key={project.id} className="group">
-                                                {/* Status Badge */}
                                                 <div className="inline-flex items-center gap-2 border border-ink/20 px-3 py-1.5 text-xs font-mono font-bold uppercase tracking-wider mb-5">
                                                    <Hourglass size={14} />
                                                    <span>{project.status === 'RESEARCH' ? 'In progress' : project.status.replace('_', ' ')}</span>
                                                 </div>
-
-                                                {/* Title & Description */}
                                                 <div className="mb-8">
                                                     <h4 className="font-sans text-3xl font-bold text-ink mb-3 group-hover:text-accent transition-colors leading-tight">
                                                         {project.title}
@@ -610,8 +582,6 @@ export const Profile: React.FC = () => {
                                                         {project.shortDescription}
                                                     </p>
                                                 </div>
-
-                                                {/* Progress Section */}
                                                 <div className="mb-6">
                                                     <div className="flex justify-between items-end mb-3 font-mono text-sm font-bold">
                                                         <span className="text-ink">Goals</span>
@@ -623,8 +593,6 @@ export const Profile: React.FC = () => {
                                                         <div className="h-full bg-ink" style={{ width: `${percent}%` }}></div>
                                                     </div>
                                                 </div>
-
-                                                {/* Footer: Bidders */}
                                                 <div className="flex items-center gap-4">
                                                      <div className="flex -space-x-2">
                                                         {['Z', 'L', 'W'].map((initial, i) => (
@@ -647,7 +615,7 @@ export const Profile: React.FC = () => {
                             </div>
                         )}
 
-                        {/* 3. IDA TAB (Article List) */}
+                        {/* 3. IDA TAB */}
                         {activeTab === 'IDA' && (
                             <div>
                                 <h3 className="font-sans text-xl text-ink/60 mb-8">IDA ({idaArticles.length})</h3>
@@ -658,8 +626,6 @@ export const Profile: React.FC = () => {
                                                 key={article.id} 
                                                 className={`group relative border-b border-ink/10 pb-12 transition-opacity duration-300 ${article.isHidden ? 'opacity-50' : 'opacity-100'}`}
                                             >
-                                                
-                                                {/* Hover Actions (Absolute Top Right) */}
                                                 <div className="absolute top-0 right-0 z-20 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                                     <button 
                                                         onClick={() => handleToggleHide(article.id)}
@@ -681,7 +647,6 @@ export const Profile: React.FC = () => {
                                                     </button>
                                                 </div>
 
-                                                {/* Row 1: Tags & Owner/Pin Indicator */}
                                                 <div className="flex justify-between items-center mb-6">
                                                     <div className="flex items-center gap-3">
                                                         {article.isFeatured && (
@@ -706,17 +671,14 @@ export const Profile: React.FC = () => {
                                                     </div>
                                                 </div>
 
-                                                {/* Row 2: Title */}
                                                 <h4 className="font-sans text-2xl md:text-3xl font-bold text-ink mb-4 leading-tight group-hover:text-accent transition-colors cursor-pointer">
                                                     {article.title}
                                                 </h4>
 
-                                                {/* Row 3: Description */}
                                                 <p className="font-sans text-base text-ink/60 leading-relaxed mb-6 max-w-4xl">
                                                     {article.description}
                                                 </p>
 
-                                                {/* Row 4: Footer Info */}
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex flex-col">
                                                         <span className="text-[10px] font-mono text-ink/40 uppercase tracking-widest mb-1">Publication time:</span>
@@ -757,7 +719,7 @@ export const Profile: React.FC = () => {
                                                      <Star 
                                                         key={star} 
                                                         size={14} 
-                                                        className={`${star <= Math.round(review.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-stone-300'}`} 
+                                                        className={`${star <= Math.round(review.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-yellow-400'}`} 
                                                      />
                                                 ))}
                                             </div>
@@ -787,240 +749,19 @@ export const Profile: React.FC = () => {
        </div>
 
        {/* Story Editor Modal */}
-       {isStoryModalOpen && (
-           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/70 backdrop-blur-md animate-in fade-in duration-300">
-               <div className="bg-paper w-full max-w-lg p-8 rounded-sm shadow-2xl relative border border-ink/10 animate-in zoom-in-95 duration-300">
-                   <div className="flex justify-between items-start mb-6">
-                       <h3 className="font-sans text-2xl font-bold text-ink">
-                           {editingStory ? 'Edit Story' : 'Add to Story'}
-                       </h3>
-                       <button onClick={() => setIsStoryModalOpen(false)} className="p-2 hover:bg-ink/5 rounded-full text-ink/60 hover:text-red-500 transition-colors">
-                           <X size={24} />
-                       </button>
-                   </div>
-                   
-                   <div className="space-y-6">
-                       <div>
-                           <label className="block text-xs font-mono font-bold uppercase tracking-widest text-ink/60 mb-2">Date</label>
-                           <input 
-                               type="text" 
-                               value={formDate}
-                               onChange={(e) => setFormDate(e.target.value)}
-                               placeholder="e.g. Nov, 2023" 
-                               className="w-full bg-surface border border-ink/20 p-3 font-mono text-sm text-ink focus:outline-none focus:border-accent rounded-sm"
-                           />
-                       </div>
-                       <div>
-                           <label className="block text-xs font-mono font-bold uppercase tracking-widest text-ink/60 mb-2">Title</label>
-                           <input 
-                               type="text" 
-                               value={formTitle}
-                               onChange={(e) => setFormTitle(e.target.value)}
-                               placeholder="Milestone title..." 
-                               className="w-full bg-surface border border-ink/20 p-3 font-sans font-bold text-lg text-ink focus:outline-none focus:border-accent rounded-sm"
-                           />
-                       </div>
-                       <div>
-                           <label className="block text-xs font-mono font-bold uppercase tracking-widest text-ink/60 mb-2">Description</label>
-                           <textarea 
-                               value={formDesc}
-                               onChange={(e) => setFormDesc(e.target.value)}
-                               placeholder="Brief description of the event..." 
-                               className="w-full bg-surface border border-ink/20 p-3 font-sans text-base text-ink focus:outline-none focus:border-accent rounded-sm h-32 resize-none leading-relaxed"
-                           />
-                       </div>
-                       
-                       <div className="flex gap-4 pt-2">
-                            <button 
-                                onClick={() => setIsStoryModalOpen(false)}
-                                className="flex-1 py-3 border border-ink/20 text-ink font-mono text-xs font-bold uppercase tracking-widest hover:bg-ink/5 transition-colors rounded-full"
-                            >
-                                Cancel
-                            </button>
-                            <button 
-                                onClick={handleSaveStory}
-                                className="flex-1 py-3 bg-ink text-paper hover:bg-accent transition-colors font-mono text-xs font-bold uppercase tracking-widest rounded-full flex justify-center items-center shadow-lg hover:scale-[1.02]"
-                            >
-                                <Save size={14} className="mr-2" />
-                                Save
-                            </button>
-                       </div>
-                   </div>
-               </div>
-           </div>
-       )}
+       <AddStoryModal 
+            isOpen={isStoryModalOpen}
+            onClose={() => setIsStoryModalOpen(false)}
+            onSave={handleSaveStory}
+       />
 
        {/* Edit Profile Modal */}
-       {isEditProfileOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm animate-in fade-in duration-300">
-            <div className="bg-paper w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-md shadow-2xl relative animate-in zoom-in-95 duration-300 flex flex-col">
-                {/* Header */}
-                <div className="flex justify-between items-center p-6 border-b border-ink/10 sticky top-0 bg-paper z-20">
-                    <h3 className="font-sans text-2xl font-bold text-ink">Edit Profile</h3>
-                    <button onClick={() => setIsEditProfileOpen(false)} className="p-2 hover:bg-ink/5 rounded-full transition-colors">
-                        <X size={24} className="text-ink/60" />
-                    </button>
-                </div>
-
-                <div className="p-8 space-y-8">
-                    {/* Banner & Avatar Area */}
-                    <div className="relative">
-                        {/* Banner */}
-                        <div className="h-48 w-full bg-stone-100 rounded-lg overflow-hidden relative group">
-                            <img src={editFormData.banner} alt="Banner" className="w-full h-full object-cover" />
-                            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
-                            <button className="absolute bottom-4 right-4 bg-ink text-paper px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 hover:bg-ink/90 transition-colors shadow-lg">
-                                <ImageIcon size={14} />
-                                Background Image
-                            </button>
-                        </div>
-
-                        {/* Avatar */}
-                        <div className="absolute -bottom-10 left-8">
-                            <div className="w-24 h-24 rounded-full border-[4px] border-paper bg-stone-200 overflow-hidden relative group/avatar">
-                                <img src={editFormData.avatar} alt="Avatar" className="w-full h-full object-cover" />
-                                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                                   <Camera size={24} className="text-white"/>
-                                </div>
-                            </div>
-                            <button className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-ink text-paper px-3 py-1 rounded-full text-[10px] font-bold flex items-center gap-1 hover:bg-ink/90 transition-colors shadow-md whitespace-nowrap z-10 border-2 border-paper">
-                                <Upload size={10} />
-                                Upload
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Spacer for avatar overflow */}
-                    <div className="h-6"></div>
-
-                    {/* Form Fields */}
-                    <div className="space-y-8 pt-4">
-                        {/* Full Name */}
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
-                            <label className="text-base font-sans text-ink">Full Name</label>
-                            <div className="md:col-span-3">
-                                <input 
-                                    type="text" 
-                                    value={editFormData.name}
-                                    onChange={(e) => setEditFormData({...editFormData, name: e.target.value})}
-                                    className="w-full border border-ink/20 rounded-sm p-3 focus:outline-none focus:border-accent transition-colors bg-white font-sans"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Position */}
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
-                            <label className="text-base font-sans text-ink">Position</label>
-                            <div className="md:col-span-3">
-                                <input 
-                                    type="text" 
-                                    value={editFormData.role}
-                                    onChange={(e) => setEditFormData({...editFormData, role: e.target.value})}
-                                    className="w-full border border-ink/20 rounded-sm p-3 focus:outline-none focus:border-accent transition-colors bg-white font-sans"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Institution */}
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
-                            <label className="text-base font-sans text-ink">Affiliated Institution</label>
-                            <div className="md:col-span-3">
-                                <input 
-                                    type="text" 
-                                    value={editFormData.institution}
-                                    onChange={(e) => setEditFormData({...editFormData, institution: e.target.value})}
-                                    className="w-full border border-ink/20 rounded-sm p-3 focus:outline-none focus:border-accent transition-colors bg-white font-sans"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Perception Tags */}
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-start">
-                            <label className="text-base font-sans text-ink pt-3">Perception Tags</label>
-                            <div className="md:col-span-3">
-                                <div className="border border-ink/20 rounded-sm p-3 bg-white min-h-[60px] flex flex-wrap gap-2">
-                                    {editFormData.tags.map((tag, idx) => (
-                                        <div key={idx} className="bg-stone-100 text-ink px-3 py-1.5 rounded-full text-sm flex items-center gap-2 group border border-ink/5">
-                                            <span>{tag.label} ({tag.count})</span>
-                                            <button 
-                                                onClick={() => handleRemoveTag(idx)}
-                                                className="text-ink/40 group-hover:text-red-500 transition-colors"
-                                            >
-                                                <X size={14} />
-                                            </button>
-                                        </div>
-                                    ))}
-                                    
-                                    {/* Add Tag Input */}
-                                    {isTagInputActive ? (
-                                        <div className="flex items-center gap-1 bg-white border-2 border-ink/20 rounded-full px-3 py-1.5 h-[34px] shadow-sm">
-                                            <input 
-                                                type="text" 
-                                                value={newTagInput}
-                                                onChange={(e) => setNewTagInput(e.target.value)}
-                                                className="w-32 text-sm outline-none bg-transparent"
-                                                placeholder="New tag..."
-                                                autoFocus
-                                                onKeyDown={(e) => {
-                                                    if (e.key === 'Enter') handleAddTag();
-                                                    if (e.key === 'Escape') setIsTagInputActive(false);
-                                                }}
-                                            />
-                                            <div className="w-px h-4 bg-ink/10 mx-1"></div>
-                                            <button onClick={handleAddTag} className="text-green-600 hover:text-green-700 hover:bg-green-50 rounded-full p-0.5"><Check size={14} /></button>
-                                            <button onClick={() => setIsTagInputActive(false)} className="text-red-500 hover:text-red-600 hover:bg-red-50 rounded-full p-0.5"><X size={14} /></button>
-                                        </div>
-                                    ) : (
-                                        <button 
-                                            onClick={() => {
-                                                setIsTagInputActive(true);
-                                                setNewTagInput('');
-                                            }}
-                                            className="border border-dashed border-ink/30 text-ink/50 px-3 py-1.5 rounded-full text-sm hover:border-ink/50 hover:text-ink transition-colors flex items-center gap-1 h-[34px]"
-                                        >
-                                            <Plus size={14} /> Add Tag
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Self Introduction */}
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-start">
-                            <label className="text-base font-sans text-ink pt-3">Self-Introduction</label>
-                            <div className="md:col-span-3">
-                                <textarea 
-                                    value={editFormData.bio}
-                                    onChange={(e) => setEditFormData({...editFormData, bio: e.target.value})}
-                                    className="w-full border border-ink/20 rounded-sm p-3 focus:outline-none focus:border-accent transition-colors bg-white h-32 resize-none leading-relaxed text-sm"
-                                    maxLength={300}
-                                />
-                                <div className="text-right text-xs text-ink/40 mt-1 font-mono">
-                                    {editFormData.bio.length}/300
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Footer */}
-                <div className="p-6 border-t border-ink/10 flex justify-end gap-4 sticky bottom-0 bg-paper z-20">
-                    <button 
-                        onClick={() => setIsEditProfileOpen(false)}
-                        className="px-8 py-3 rounded-full border border-ink/20 text-ink font-bold hover:bg-stone-50 transition-colors"
-                    >
-                        Cancel
-                    </button>
-                    <button 
-                        onClick={handleSaveProfile}
-                        className="px-8 py-3 rounded-full bg-ink text-paper font-bold hover:bg-ink/90 transition-colors shadow-lg"
-                    >
-                        Save
-                    </button>
-                </div>
-            </div>
-        </div>
-        )}
+       <EditProfileModal 
+            isOpen={isEditProfileOpen}
+            onClose={() => setIsEditProfileOpen(false)}
+            initialData={editFormData}
+            onSave={handleSaveProfile}
+       />
 
     </div>
   );

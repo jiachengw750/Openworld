@@ -4,18 +4,24 @@ import { X, Upload, Plus, X as XIcon, Save, Loader2 } from 'lucide-react';
 
 interface ProfileData {
   name: string;
-  title: string;
+  role?: string; // Updated to match Profile.tsx
+  title?: string; // Kept for backward compatibility
   institution: string;
   avatar: string;
   bio: string;
   fieldsOfStudy: string[];
+  joinDate?: string;
+  // Optional new fields to prevent type errors when saving
+  researchFields?: string[];
+  subjects?: string[];
+  banner?: string;
 }
 
 interface EditProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
-  initialData: ProfileData;
-  onSave: (data: ProfileData) => void;
+  initialData: any; // Relaxed type for now to handle slight schema diffs or map it
+  onSave: (data: any) => void;
 }
 
 export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onClose, initialData, onSave }) => {
@@ -142,8 +148,8 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
               <label className="block text-[10px] font-mono uppercase tracking-widest text-ink/60 mb-2 font-bold">Title / Role</label>
               <input 
                 type="text"
-                name="title"
-                value={formData.title}
+                name="role" // Changed from title to role to match main state
+                value={formData.role || formData.title}
                 onChange={handleInputChange}
                 className="w-full bg-surface border border-ink/20 p-3 font-sans text-sm text-ink focus:outline-none focus:border-accent rounded-sm"
               />
@@ -172,9 +178,9 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
             />
           </div>
 
-          {/* Fields of Study (Tags) */}
+          {/* Fields of Study (Legacy / General Tags) */}
           <div>
-            <label className="block text-[10px] font-mono uppercase tracking-widest text-ink/60 mb-2 font-bold">Fields of Study</label>
+            <label className="block text-[10px] font-mono uppercase tracking-widest text-ink/60 mb-2 font-bold">General Interests</label>
             <div className="bg-surface border border-ink/20 p-3 rounded-sm min-h-[50px] flex flex-wrap gap-2 items-center">
               {formData.fieldsOfStudy.map(tag => (
                 <span key={tag} className="bg-stone/10 border border-ink/10 px-2 py-1 rounded-sm text-xs font-mono font-bold text-ink flex items-center gap-1 group">
@@ -190,11 +196,11 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
                 onChange={(e) => setNewTag(e.target.value)}
                 onKeyDown={handleKeyDown}
                 onBlur={handleAddTag}
-                placeholder={formData.fieldsOfStudy.length === 0 ? "Add tags (e.g. Neuroscience)..." : ""}
+                placeholder={formData.fieldsOfStudy.length === 0 ? "Add tags..." : ""}
                 className="bg-transparent text-sm font-sans focus:outline-none flex-1 min-w-[120px]"
               />
             </div>
-            <p className="text-[10px] text-ink/40 mt-2">Press Enter to add a tag.</p>
+            <p className="text-[10px] text-ink/40 mt-2">Press Enter to add a tag. Specific research fields and subjects can be managed directly on your profile page.</p>
           </div>
 
         </div>

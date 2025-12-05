@@ -19,36 +19,38 @@ export const FeaturedProject: React.FC<FeaturedProjectProps> = ({ project }) => 
         <section className="grid grid-cols-1 lg:grid-cols-2 border-b border-ink/10 group relative">
             <Link 
                 to={`/project/${project.id}`}
-                className="bg-accent text-paper p-12 md:p-20 flex flex-col justify-center relative overflow-hidden transition-colors duration-500 group-hover:bg-accent/90"
+                className="bg-stone/10 text-ink p-12 md:p-20 flex flex-col justify-center relative overflow-hidden transition-colors duration-500 group-hover:bg-stone/20"
             >
-                <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/graphy.png')]"></div>
+                <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/graphy.png')] mix-blend-multiply"></div>
                 
-                <span className="font-mono text-xs mb-4 inline-block border border-paper/30 px-3 py-1 rounded-full w-fit bg-paper/10 backdrop-blur-sm">RECOMMENDED PROJECT</span>
+                <span className="font-sans text-sm mb-6 inline-block px-5 py-2 rounded-full w-fit bg-ink/5 text-ink font-medium tracking-tight">
+                    RECOMMENDED PROJECT
+                </span>
                 
-                <h2 className="font-sans font-medium text-4xl md:text-5xl mb-6 leading-tight group-hover:translate-x-1 transition-transform duration-500">
+                <h2 className="font-sans font-medium text-4xl md:text-5xl mb-6 leading-tight group-hover:translate-x-1 transition-transform duration-500 text-ink">
                 {project.title}
                 </h2>
-                <p className="font-sans text-paper/80 text-lg mb-8 max-w-md leading-relaxed">
+                <p className="font-sans text-ink/70 text-lg mb-8 max-w-md leading-relaxed">
                 {project.shortDescription}
                 </p>
 
                 <div className="flex items-center space-x-4 mb-8 max-w-md">
-                    <img src={project.authorAvatar} alt={project.author} className="w-12 h-12 rounded-full border-2 border-paper/20 object-cover" />
+                    <img src={project.authorAvatar} alt={project.author} className="w-12 h-12 rounded-full border-2 border-ink/10 object-cover" />
                     <div className="flex flex-col">
-                        <span className="font-bold font-sans text-paper text-sm">{project.author}</span>
-                        <span className="font-sans text-xs text-paper/60 tracking-widest">{project.institution}</span>
+                        <span className="font-bold font-sans text-ink text-sm">{project.author}</span>
+                        <span className="font-sans text-xs text-ink/50 tracking-widest">{project.institution}</span>
                     </div>
                 </div>
                 
-                <div className="bg-paper/10 p-6 rounded-sm backdrop-blur-md mb-8 border border-paper/20 group-hover:bg-paper/15 transition-colors">
-                    <div className="flex justify-between items-end mb-2 font-mono text-paper">
+                <div className="bg-white/60 p-6 rounded-sm backdrop-blur-md mb-8 border border-ink/10 group-hover:bg-white/80 transition-colors shadow-sm">
+                    <div className="flex justify-between items-end mb-2 font-mono text-ink">
                         <span className="text-2xl font-bold font-mono">{featuredPercent}%</span>
-                        <span className="text-xs opacity-80 font-mono">FUNDED</span>
+                        <span className="text-xs opacity-60 font-mono font-bold">FUNDED</span>
                     </div>
-                    <div className="w-full h-1 bg-paper/10 mb-4 rounded-full overflow-hidden">
-                        <div className="h-full bg-paper transition-all duration-1000 ease-out" style={{ width: `${featuredPercent}%` }}></div>
+                    <div className="w-full h-1 bg-ink/10 mb-4 rounded-full overflow-hidden">
+                        <div className="h-full bg-accent transition-all duration-1000 ease-out" style={{ width: `${featuredPercent}%` }}></div>
                     </div>
-                    <div className="flex justify-between text-xs font-mono text-paper/90">
+                    <div className="flex justify-between text-xs font-mono text-ink/60 font-bold">
                         <span className="font-mono">{formatCurrency(project.raised)} RAISED</span>
                         <span className="font-mono">{project.backers} DONORS</span>
                     </div>
