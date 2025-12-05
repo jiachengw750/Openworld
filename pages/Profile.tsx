@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  ArrowLeft, Settings, Trophy, RefreshCw, 
+  ArrowLeft, Trophy, RefreshCw, 
   Building2, Edit3, Github, Linkedin, Twitter,
   BadgeCheck, Award, GraduationCap, Fingerprint, 
   Plus, Trash2, X, Save, BookOpen, MessageSquare,
   Hourglass, Sparkles, User, ThumbsUp, EyeOff, ArrowUpToLine,
-  Star, Image as ImageIcon, Camera, Upload, Check
+  Star, Image as ImageIcon, Camera, Upload, Check, Eye
 } from 'lucide-react';
 import { useWallet } from '../context/WalletContext';
 import { useToast } from '../context/ToastContext';
@@ -174,7 +174,7 @@ export const Profile: React.FC = () => {
   const [isTagInputActive, setIsTagInputActive] = useState(false);
   const [newTagInput, setNewTagInput] = useState('');
 
-  // -- Fields of Study Input State (Sidebar) --
+  // -- Fields of Study Input State --
   const [isFieldInputActive, setIsFieldInputActive] = useState(false);
   const [newFieldInput, setNewFieldInput] = useState('');
 
@@ -259,7 +259,7 @@ export const Profile: React.FC = () => {
 
   const handleToggleHide = (id: string) => {
        setIdaArticles(prev => prev.map(item => item.id === id ? { ...item, isHidden: !item.isHidden } : item));
-       showToast('Article visibility updated');
+       // showToast('Article visibility updated');
   };
 
   // -- Profile Edit Handlers --
@@ -325,8 +325,8 @@ export const Profile: React.FC = () => {
             <div className="max-w-[1512px] mx-auto px-6 md:px-12 pb-12 mt-8">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
                     
-                    {/* LEFT COLUMN SKELETON */}
-                    <div className="lg:col-span-8">
+                    {/* FULL COLUMN SKELETON */}
+                    <div className="lg:col-span-12">
                         
                         {/* Profile Header Card Skeleton */}
                         <div className="bg-surface border border-ink/5 rounded-sm mb-12 p-8 md:p-12 relative overflow-hidden h-[420px]">
@@ -387,29 +387,6 @@ export const Profile: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* RIGHT COLUMN SKELETON */}
-                    <div className="lg:col-span-4 space-y-10">
-                        {/* LEX Score Card */}
-                        <div className="h-64 bg-stone-50 border border-ink/5 p-8 flex flex-col justify-between">
-                            <div className={`h-4 w-24 rounded ${shimmerClass}`}></div>
-                            <div className="flex items-center gap-4">
-                                <div className={`w-10 h-10 rounded-full ${shimmerClass}`}></div>
-                                <div className={`h-12 w-32 rounded ${shimmerClass}`}></div>
-                            </div>
-                            <div className={`h-10 w-full rounded ${shimmerClass}`}></div>
-                        </div>
-
-                        {/* Tags */}
-                        <div>
-                            <div className={`h-6 w-32 rounded mb-4 ${shimmerClass}`}></div>
-                            <div className="flex flex-wrap gap-2">
-                                {[1, 2, 3, 4, 5, 6].map((i) => (
-                                    <div key={i} className={`h-8 w-24 rounded-full ${shimmerClass}`}></div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -431,8 +408,8 @@ export const Profile: React.FC = () => {
        <div className="max-w-[1512px] mx-auto px-6 md:px-12 pb-12 mt-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
                 
-                {/* LEFT COLUMN: Main Content (8 cols) */}
-                <div className="lg:col-span-8">
+                {/* FULL COLUMN: Main Content (12 cols) */}
+                <div className="lg:col-span-12">
                     
                     {/* --- PROFILE HEADER BLOCK --- */}
                     <div className="bg-surface border border-ink/10 rounded-sm mb-12 p-8 md:p-12 relative overflow-hidden shadow-sm group">
@@ -463,7 +440,52 @@ export const Profile: React.FC = () => {
                                 </div>
                                 <p className="text-lg text-ink/50 font-sans mb-1">{profileData.role}</p>
                                 <p className="text-lg text-ink/50 font-sans">{profileData.institution}</p>
+
+                                {/* Fields of Study - Directly below Identity */}
+                                <div className="mt-4 flex flex-wrap gap-2 items-center">
+                                    {profileData.fieldsOfStudy.map((field, index) => (
+                                        <div key={index} className="group flex items-center bg-stone-100 text-ink px-3 py-1 rounded-full text-xs font-medium border border-ink/10 hover:border-ink/30 transition-all cursor-default">
+                                            {field}
+                                            <button
+                                                onClick={() => handleRemoveField(index)}
+                                                className="ml-2 text-ink/40 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <X size={12} />
+                                            </button>
+                                        </div>
+                                    ))}
+                                    {isFieldInputActive ? (
+                                        <div className="flex items-center gap-1 bg-white border border-ink/20 rounded-full px-3 py-1 shadow-sm">
+                                            <input
+                                                type="text"
+                                                value={newFieldInput}
+                                                onChange={(e) => setNewFieldInput(e.target.value)}
+                                                className="w-24 text-xs outline-none bg-transparent"
+                                                placeholder="Add field..."
+                                                autoFocus
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') handleAddField();
+                                                    if (e.key === 'Escape') setIsFieldInputActive(false);
+                                                }}
+                                            />
+                                            <button onClick={handleAddField} className="text-green-600 hover:bg-green-50 rounded-full p-0.5"><Check size={12} /></button>
+                                            <button onClick={() => setIsFieldInputActive(false)} className="text-red-500 hover:bg-red-50 rounded-full p-0.5"><X size={12} /></button>
+                                        </div>
+                                    ) : (
+                                        <button
+                                            onClick={() => {
+                                                setIsFieldInputActive(true);
+                                                setNewFieldInput('');
+                                            }}
+                                            className="flex items-center justify-center w-6 h-6 rounded-full border border-ink/20 text-ink/40 hover:text-ink hover:border-ink transition-colors"
+                                            title="Add Field of Study"
+                                        >
+                                            <Plus size={14} />
+                                        </button>
+                                    )}
+                                </div>
                             </div>
+                            
                             <button 
                                 onClick={handleOpenEditProfile}
                                 className="flex items-center gap-2 bg-ink text-white px-5 py-2 rounded-full font-mono text-xs font-bold uppercase tracking-wider hover:bg-ink/90 transition-colors shadow-lg hover:scale-[1.02]"
@@ -472,17 +494,9 @@ export const Profile: React.FC = () => {
                             </button>
                         </div>
 
-                        {/* Tags & Bio */}
-                        <div className="relative z-10 mb-10">
-                            <div className="flex flex-wrap gap-2 mb-6">
-                                {profileData.tags.map((tag) => (
-                                    <div key={tag.label} className="flex items-center bg-stone-100 hover:bg-stone-200 text-ink/70 px-3 py-1 rounded-full text-xs font-medium transition-colors cursor-default">
-                                        <span className="mr-1">{tag.label}</span>
-                                        <span className="opacity-60">({tag.count})</span>
-                                    </div>
-                                ))}
-                            </div>
-                            <p className="text-lg text-ink/80 leading-relaxed font-sans max-w-3xl">{profileData.bio}</p>
+                        {/* Bio - Full Width */}
+                        <div className="relative z-10 mb-10 w-full">
+                            <p className="text-lg text-ink/80 leading-relaxed font-sans w-full">{profileData.bio}</p>
                         </div>
 
                         {/* Social Links */}
@@ -636,21 +650,23 @@ export const Profile: React.FC = () => {
                         {/* 3. IDA TAB (Article List) */}
                         {activeTab === 'IDA' && (
                             <div>
-                                <h3 className="font-sans text-xl text-ink/60 mb-8">IDA ({idaArticles.filter(a => !a.isHidden).length})</h3>
+                                <h3 className="font-sans text-xl text-ink/60 mb-8">IDA ({idaArticles.length})</h3>
                                 <div className="space-y-12">
                                     {idaArticles.map(article => {
-                                        if (article.isHidden) return null;
                                         return (
-                                            <div key={article.id} className="group relative border-b border-ink/10 pb-12">
+                                            <div 
+                                                key={article.id} 
+                                                className={`group relative border-b border-ink/10 pb-12 transition-opacity duration-300 ${article.isHidden ? 'opacity-50' : 'opacity-100'}`}
+                                            >
                                                 
                                                 {/* Hover Actions (Absolute Top Right) */}
                                                 <div className="absolute top-0 right-0 z-20 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                                     <button 
                                                         onClick={() => handleToggleHide(article.id)}
                                                         className="w-10 h-10 rounded-full bg-stone-200 hover:bg-stone-300 flex items-center justify-center text-ink/60 hover:text-ink transition-colors shadow-sm"
-                                                        title="Hide"
+                                                        title={article.isHidden ? "Unhide" : "Hide"}
                                                     >
-                                                        <EyeOff size={18} />
+                                                        {article.isHidden ? <Eye size={18} /> : <EyeOff size={18} />}
                                                     </button>
                                                     <button 
                                                         onClick={() => handleTogglePin(article.id)}
@@ -721,11 +737,6 @@ export const Profile: React.FC = () => {
                                             </div>
                                         );
                                     })}
-                                    {idaArticles.every(a => a.isHidden) && (
-                                        <div className="py-20 text-center border border-dashed border-ink/10 bg-stone/5">
-                                            <p className="text-ink/50 font-mono text-sm uppercase tracking-widest">No articles visible</p>
-                                        </div>
-                                    )}
                                 </div>
                             </div>
                         )}
@@ -769,94 +780,6 @@ export const Profile: React.FC = () => {
                             </div>
                         )}
 
-                    </div>
-                </div>
-
-                {/* RIGHT COLUMN: Sidebar Widgets (4 cols) */}
-                <div className="lg:col-span-4 space-y-10">
-                    
-                    {/* 2. LEX Score Card */}
-                    <div className="bg-stone/5 p-8 border border-ink/5 relative overflow-hidden">
-                        <div className="flex items-center space-x-2 text-ink mb-6">
-                            <Trophy size={20} className="text-ink" strokeWidth={1.5} />
-                            <span className="font-mono text-xs font-bold uppercase tracking-wider text-ink/70">LEX (Lifetime Expertise Score)</span>
-                        </div>
-                        
-                        <div className="flex items-center space-x-4 mb-4 relative z-10">
-                             <div className="w-10 h-10 rounded-full bg-ink text-paper flex items-center justify-center shrink-0">
-                                <Building2 size={18} />
-                             </div>
-                             <span className="font-sans text-6xl font-bold text-ink tracking-tighter leading-none">8567</span>
-                        </div>
-
-                        <p className="text-sm text-ink/60 leading-relaxed mb-8 font-sans border-l-2 border-ink/10 pl-4">
-                            This synthesis incorporates OpenSci contributions and associated external scholarly achievements.
-                        </p>
-
-                        <button className="w-full py-4 border border-ink/10 bg-paper hover:bg-white transition-colors flex items-center justify-center space-x-2 text-xs font-mono font-bold uppercase tracking-widest text-ink/50 hover:text-ink">
-                            <RefreshCw size={14} />
-                            <span>Next Refresh: 180 Days</span>
-                        </button>
-                    </div>
-
-                    {/* 3. Fields of Study (Interactive) */}
-                    <div>
-                        <h3 className="font-sans text-xl font-bold text-ink mb-5">Fields of Study</h3>
-                        <div className="flex flex-wrap gap-2">
-                            {profileData.fieldsOfStudy.map((tag, idx) => (
-                                <div key={idx} className="group relative">
-                                    <span className="px-4 py-2 bg-stone/10 hover:bg-stone/20 transition-colors border border-transparent hover:border-ink/10 rounded-full text-xs font-mono font-bold text-ink/70 cursor-default flex items-center">
-                                        {tag}
-                                        <button 
-                                            onClick={() => handleRemoveField(idx)}
-                                            className="ml-2 text-ink/40 hover:text-red-500 hidden group-hover:block transition-colors"
-                                        >
-                                            <X size={12} />
-                                        </button>
-                                    </span>
-                                </div>
-                            ))}
-                            
-                            {/* Add Button / Input */}
-                            {isFieldInputActive ? (
-                                <div className="flex items-center gap-1 bg-white border-2 border-ink/20 rounded-full px-3 py-1.5 h-[34px] shadow-sm animate-in fade-in zoom-in-95 duration-200">
-                                    <input 
-                                        type="text" 
-                                        value={newFieldInput}
-                                        onChange={(e) => setNewFieldInput(e.target.value)}
-                                        className="w-24 text-xs font-mono font-bold outline-none bg-transparent text-ink placeholder-ink/30"
-                                        placeholder="New..."
-                                        autoFocus
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter') handleAddField();
-                                            if (e.key === 'Escape') setIsFieldInputActive(false);
-                                        }}
-                                    />
-                                    <div className="w-px h-3 bg-ink/10 mx-1"></div>
-                                    <button onClick={handleAddField} className="text-green-600 hover:text-green-700 hover:bg-green-50 rounded-full p-0.5"><Check size={12} /></button>
-                                    <button onClick={() => setIsFieldInputActive(false)} className="text-red-500 hover:text-red-600 hover:bg-red-50 rounded-full p-0.5"><X size={12} /></button>
-                                </div>
-                            ) : (
-                                <button 
-                                    onClick={() => {
-                                        setIsFieldInputActive(true);
-                                        setNewFieldInput('');
-                                    }}
-                                    className="px-3 py-2 bg-stone/5 border border-dashed border-ink/20 hover:border-ink/40 rounded-full text-xs font-mono font-bold text-ink/40 hover:text-ink transition-all flex items-center gap-1 h-[34px]"
-                                >
-                                    <Plus size={12} /> Add
-                                </button>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* 4. Status */}
-                    <div className="pt-8 border-t border-ink/10">
-                        <h3 className="font-sans text-xl font-bold text-ink mb-5">Status</h3>
-                        <div className="flex justify-between items-center group">
-                            <span className="text-sm text-ink/60 font-sans group-hover:text-ink transition-colors">Date Joined</span>
-                            <span className="font-mono text-sm font-bold text-ink">Jul, 2020</span>
-                        </div>
                     </div>
                 </div>
 
