@@ -112,11 +112,11 @@ export const Navbar: React.FC = () => {
         {/* Center: Links (Desktop) */}
         <div className="hidden md:flex items-center space-x-10 text-sm font-bold font-mono uppercase tracking-widest text-ink/70">
           <Link to="/" className={`${isActive('/')} transition-colors`}>HOME</Link>
-          <a href="#" className="hover:text-ink transition-colors">GRANTS</a>
+          <button className="hover:text-ink transition-colors cursor-pointer">GRANTS</button>
           <Link to="/quest" className={`${isActive('/quest')} transition-colors`}>QUEST</Link>
-          <a href="#" className="hover:text-ink transition-colors">AI TOOLS</a>
+          <button className="hover:text-ink transition-colors cursor-pointer">AI TOOLS</button>
           
-          <a href="#" className="hover:text-ink transition-colors flex items-center group">
+          <button className="hover:text-ink transition-colors flex items-center group cursor-pointer">
              WLS
              <span className="ml-2 flex items-center gap-1.5 bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded-full group-hover:bg-red-500/20 transition-colors">
                 <span className="relative flex h-2 w-2">
@@ -125,9 +125,9 @@ export const Navbar: React.FC = () => {
                 </span>
                 <span className="text-[10px] font-bold text-red-600 tracking-wider leading-none">LIVE</span>
              </span>
-          </a>
+          </button>
 
-          <a href="#" className="hover:text-ink transition-colors">PRIZE</a>
+          <button className="hover:text-ink transition-colors cursor-pointer">PRIZE</button>
         </div>
 
         {/* Right: Actions */}

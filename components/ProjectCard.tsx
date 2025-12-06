@@ -32,7 +32,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, customLink, s
 
   const baseClasses = "group flex flex-col p-8 transition-all duration-300 relative h-full justify-between";
   const gridClasses = "border-b md:border-r border-ink/10 bg-paper hover:bg-stone/5 rounded-none";
-  const cardClasses = "bg-surface border border-ink/10 rounded-sm hover:border-ink/30";
+  // Updated cardClasses: transparent bg (outline only) and hover background effect
+  const cardClasses = "bg-transparent border border-ink/10 rounded-sm hover:bg-stone/5 transition-colors";
 
   return (
     <Link 
