@@ -100,7 +100,7 @@ export const Profile: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-paper pb-24">
-            <div className="bg-surface border-b border-ink/10 pt-24 pb-12 px-6 md:px-12 sticky top-0 z-20">
+            <div className="bg-surface border-b border-ink/10 pt-24 pb-12 px-6 md:px-12">
                 <div className="max-w-[1512px] mx-auto">
                     <Link to="/" className="flex items-center text-xs font-mono font-bold text-ink/60 hover:text-ink transition-colors uppercase tracking-widest w-fit mb-8">
                         <ArrowLeft size={14} className="mr-2" /> Back to Home

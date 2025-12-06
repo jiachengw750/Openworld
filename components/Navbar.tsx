@@ -193,15 +193,19 @@ export const Navbar: React.FC = () => {
                 {isMenuOpen && (
                     <div className="absolute right-0 top-full mt-4 w-[360px] bg-paper border border-ink/10 shadow-2xl rounded-sm overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300 z-50 flex flex-col">
                         
-                        {/* User Info */}
+                        {/* User Info - Clickable to Profile */}
                         <div className="p-6 pb-4">
-                            <div className="flex items-start space-x-4 mb-5">
-                                <img src={wallet.avatar} alt="User" className="w-14 h-14 rounded-full object-cover border border-ink/10 grayscale" />
+                            <Link 
+                                to="/profile" 
+                                onClick={() => setIsMenuOpen(false)}
+                                className="flex items-start space-x-4 mb-5 group/profile cursor-pointer"
+                            >
+                                <img src={wallet.avatar} alt="User" className="w-14 h-14 rounded-full object-cover border border-ink/10 grayscale group-hover/profile:grayscale-0 transition-all" />
                                 <div className="flex flex-col pt-1">
-                                    <span className="font-sans font-bold text-xl text-ink leading-tight">{wallet.name}</span>
+                                    <span className="font-sans font-bold text-xl text-ink leading-tight group-hover/profile:text-accent transition-colors">{wallet.name}</span>
                                     <span className="font-mono text-sm text-ink/60 tracking-wide mt-1">{isScientist ? 'Researcher' : 'Backer'}</span>
                                 </div>
-                            </div>
+                            </Link>
                             <div 
                                 className="bg-stone/5 border border-ink/10 p-4 flex justify-between items-center rounded-sm group/copy cursor-pointer hover:border-ink/30 transition-colors"
                                 onClick={copyAddress}
