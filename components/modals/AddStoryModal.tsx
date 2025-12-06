@@ -5,10 +5,11 @@ import { X, Calendar, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 interface AddStoryModalProps {
   isOpen: boolean;
   onClose: () => void;
+  initialData?: { time: string; title: string; description: string } | null;
   onSave: (data: { time: string; title: string; description: string }) => void;
 }
 
-export const AddStoryModal: React.FC<AddStoryModalProps> = ({ isOpen, onClose, onSave }) => {
+export const AddStoryModal: React.FC<AddStoryModalProps> = ({ isOpen, onClose, initialData, onSave }) => {
   const [time, setTime] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -19,17 +20,27 @@ export const AddStoryModal: React.FC<AddStoryModalProps> = ({ isOpen, onClose, o
   const [pickerYear, setPickerYear] = useState(new Date().getFullYear());
   const dateContainerRef = useRef<HTMLDivElement>(null);
 
-  // Reset fields when opening
+  // Reset or populate fields when opening
   useEffect(() => {
     if (isOpen) {
-        setTime('');
-        setTitle('');
-        setDescription('');
+        if (initialData) {
+            setTime(initialData.time);
+            setTitle(initialData.title);
+            setDescription(initialData.description);
+            
+            // Try to parse year from time string (e.g. "Nov, 2023")
+            const yearMatch = initialData.time.match(/\d{4}/);
+            setPickerYear(yearMatch ? parseInt(yearMatch[0]) : new Date().getFullYear());
+        } else {
+            setTime('');
+            setTitle('');
+            setDescription('');
+            setPickerYear(new Date().getFullYear());
+        }
         setIsSaving(false);
-        setPickerYear(new Date().getFullYear());
         setIsDatePickerOpen(false);
     }
-  }, [isOpen]);
+  }, [isOpen, initialData]);
 
   // Click outside handler for date picker
   useEffect(() => {
@@ -80,7 +91,7 @@ export const AddStoryModal: React.FC<AddStoryModalProps> = ({ isOpen, onClose, o
         
         {/* Header */}
         <div className="flex justify-between items-center px-8 py-6 border-b border-ink/10">
-          <h3 className="font-sans text-2xl font-bold text-ink">Edit Milestone</h3>
+          <h3 className="font-sans text-2xl font-bold text-ink">{initialData ? 'Edit Milestone' : 'Add Milestone'}</h3>
           <button 
             onClick={onClose}
             className="p-2 text-ink/40 hover:text-ink transition-colors rounded-full hover:bg-stone/10"

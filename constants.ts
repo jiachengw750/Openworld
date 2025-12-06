@@ -1,6 +1,6 @@
 
 
-import { Project, DonationVoucher, Quest } from './types';
+import { Project, DonationVoucher, Quest, UserProfile, StoryItem, IdaArticle, ReviewItem } from './types';
 
 export const PROJECTS: Project[] = [
   {
@@ -555,4 +555,36 @@ export const USER_DONATIONS: DonationVoucher[] = [
         image: 'https://picsum.photos/400/400?random=12',
         transactionHash: '0xghi789...'
     }
+];
+
+// --- Profile Mock Data ---
+
+export const INITIAL_PROFILE: UserProfile = {
+    name: "Zhang Wei",
+    role: "Associate Professor",
+    institution: "School of Medicine, Tsinghua University",
+    avatar: "https://i.pravatar.cc/300?u=zhangwei",
+    banner: "https://picsum.photos/seed/science_banner/1200/400",
+    bio: "Specializing in Medical Artificial Intelligence and the application of deep learning in medical imaging diagnostics. Dedicated to advancing the innovation and application of AI technologies in precision medicine, with over 50 SCI-indexed publications and leadership in three National Natural Science Foundation of China projects.",
+    joinDate: "Jul, 2020",
+    researchFields: ['Medical AI', 'Deep Learning', 'Precision Medicine', 'Medical Imaging'],
+    subjects: ['Quantum mechanic', 'Introduction to Mathematics'],
+    fieldsOfStudy: ['Medical AI', 'Deep Learning', 'Precision Medicine', 'Medical Imaging']
+};
+
+export const INITIAL_STORIES: StoryItem[] = [
+    { id: '1', date: 'Nov, 2023', title: 'Published the first selected paper titled "Application of Deep Learning in Medical Image Diagnosis"', description: 'This study proposed a new neural network architecture, which significantly improved the diagnostic accuracy for lung diseases.' },
+    { id: '2', date: 'Jun, 2022', title: 'Obtained the National Natural Science Foundation of China\'s Outstanding Young Investigator Project', description: 'Project Name: Precision Medicine Research Based on Machine Learning' },
+    { id: '3', date: 'Jul, 2020', title: 'Received a Ph.D. in Computer Science from Tsinghua University', description: 'Doctoral Dissertation: "Research on Medical Image Analysis Methods Based on Deep Learning", Supervisor: Professor Zhang San' }
+];
+
+export const INITIAL_IDA: IdaArticle[] = [
+    { id: '1', title: 'The Application and Challenges of Deep Learning in Medical Image Diagnosis', description: 'This article systematically reviews the latest advancements of deep learning technology in the field of medical image diagnosis, analyzes the main challenges currently faced, and proposes future research directions.', tags: ['MEDICINE AI'], isFeatured: true, publicationDate: 'Nov, 2023', likes: 234, comments: 45, isPinned: false, isHidden: false },
+    { id: '2', title: 'The Application of Federated Learning in Protecting Privacy of Medical Data', description: 'Introduce how the federated learning technology enables AI model collaboration training among multiple medical institutions while protecting patient privacy.', tags: ['EXPLAINABLE AI'], isFeatured: false, publicationDate: 'Nov, 2023', likes: 234, comments: 45, isPinned: false, isHidden: false },
+    { id: '3', title: 'Deep Learning in Precision Medicine: A Comprehensive Survey', description: 'A deep dive into how AI is revolutionizing personalized treatment plans by analyzing genomic data and medical history with unprecedented accuracy.', tags: ['PRECISION MEDICINE'], isFeatured: false, publicationDate: 'Oct, 2023', likes: 189, comments: 32, isPinned: false, isHidden: false }
+];
+
+export const INITIAL_REVIEWS: ReviewItem[] = [
+    { id: '1', status: 'PUBLISHED', rating: 4.2, title: 'A new method for protein structure prediction based on Transformer...', description: 'The method proposed in this paper has achieved significant improvements in protein structure prediction. The experimental design is reasonable and the results are convincing.', publicationDate: 'OCT, 2023' },
+    { id: '2', status: 'PUBLISHED', rating: 4.2, title: 'A new method for protein structure prediction based on Transformer', description: 'The method proposed in this paper has achieved significant improvements in protein structure prediction.', publicationDate: 'OCT, 2023' }
 ];

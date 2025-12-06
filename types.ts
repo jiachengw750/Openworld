@@ -107,3 +107,47 @@ export interface Quest {
   };
   commentsCount: number;
 }
+
+// Profile Types
+export interface StoryItem {
+  id: string;
+  date: string;
+  title: string;
+  description: string;
+}
+
+export interface IdaArticle {
+  id: string;
+  title: string;
+  description: string;
+  tags: string[];
+  isFeatured: boolean;
+  publicationDate: string;
+  likes: number;
+  comments: number;
+  isPinned: boolean;
+  isHidden: boolean;
+}
+
+export interface ReviewItem {
+  id: string;
+  status: string;
+  rating: number;
+  title: string;
+  description: string;
+  publicationDate: string;
+}
+
+export interface UserProfile {
+  name: string;
+  role: string;
+  institution: string;
+  avatar: string;
+  banner: string;
+  bio: string;
+  joinDate: string;
+  researchFields: string[];
+  subjects: string[];
+  fieldsOfStudy: string[];
+  title?: string;
+}

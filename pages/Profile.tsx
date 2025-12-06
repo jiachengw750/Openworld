@@ -7,46 +7,16 @@ import {
 } from 'lucide-react';
 import { useWallet } from '../context/WalletContext';
 import { useToast } from '../context/ToastContext';
-import { PROJECTS } from '../constants';
+import { PROJECTS, INITIAL_PROFILE, INITIAL_STORIES, INITIAL_IDA, INITIAL_REVIEWS } from '../constants';
+import { StoryItem, IdaArticle, ReviewItem, UserProfile } from '../types';
 import { EditProfileModal } from '../components/modals/EditProfileModal';
 import { AddStoryModal } from '../components/modals/AddStoryModal';
 import { PlatformVerificationModal } from '../components/modals/PlatformVerificationModal';
-import { StoryTab, ProjectsTab, IdaTab, ReviewsTab, TagSection, StoryItem, IdaArticle, ReviewItem } from '../components/profile/ProfileTabs';
+import { DeleteConfirmationModal } from '../components/modals/DeleteConfirmationModal';
+import { StoryTab, ProjectsTab, IdaTab, ReviewsTab } from '../components/profile/ProfileTabs';
+import { TagSection } from '../components/profile/TagSection';
 
-// --- Constants ---
 type TabType = 'MY_STORY' | 'PROJECTS' | 'IDA' | 'REVIEWS';
-
-const INITIAL_PROFILE = {
-    name: "Zhang Wei",
-    role: "Associate Professor",
-    institution: "School of Medicine, Tsinghua University",
-    avatar: "https://i.pravatar.cc/300?u=zhangwei",
-    banner: "https://picsum.photos/seed/science_banner/1200/400",
-    bio: "Specializing in Medical Artificial Intelligence and the application of deep learning in medical imaging diagnostics. Dedicated to advancing the innovation and application of AI technologies in precision medicine, with over 50 SCI-indexed publications and leadership in three National Natural Science Foundation of China projects.",
-    joinDate: "Jul, 2020",
-    researchFields: ['Medical AI', 'Deep Learning', 'Precision Medicine', 'Medical Imaging'],
-    subjects: ['Quantum mechanic', 'Introduction to Mathematics'],
-    fieldsOfStudy: ['Medical AI', 'Deep Learning', 'Precision Medicine', 'Medical Imaging']
-};
-
-const INITIAL_STORIES: StoryItem[] = [
-    { id: '1', date: 'Nov, 2023', title: 'Published the first selected paper titled "Application of Deep Learning in Medical Image Diagnosis"', description: 'This study proposed a new neural network architecture, which significantly improved the diagnostic accuracy for lung diseases.' },
-    { id: '2', date: 'Jun, 2022', title: 'Obtained the National Natural Science Foundation of China\'s Outstanding Young Investigator Project', description: 'Project Name: Precision Medicine Research Based on Machine Learning' },
-    { id: '3', date: 'Jul, 2020', title: 'Received a Ph.D. in Computer Science from Tsinghua University', description: 'Doctoral Dissertation: "Research on Medical Image Analysis Methods Based on Deep Learning", Supervisor: Professor Zhang San' }
-];
-
-const INITIAL_IDA: IdaArticle[] = [
-    { id: '1', title: 'The Application and Challenges of Deep Learning in Medical Image Diagnosis', description: 'This article systematically reviews the latest advancements of deep learning technology in the field of medical image diagnosis, analyzes the main challenges currently faced, and proposes future research directions.', tags: ['MEDICINE AI'], isFeatured: true, publicationDate: 'Nov, 2023', likes: 234, comments: 45, isPinned: false, isHidden: false },
-    { id: '2', title: 'The Application of Federated Learning in Protecting Privacy of Medical Data', description: 'Introduce how the federated learning technology enables AI model collaboration training among multiple medical institutions while protecting patient privacy.', tags: ['EXPLAINABLE AI'], isFeatured: false, publicationDate: 'Nov, 2023', likes: 234, comments: 45, isPinned: false, isHidden: false },
-    { id: '3', title: 'Deep Learning in Precision Medicine: A Comprehensive Survey', description: 'A deep dive into how AI is revolutionizing personalized treatment plans by analyzing genomic data and medical history with unprecedented accuracy.', tags: ['PRECISION MEDICINE'], isFeatured: false, publicationDate: 'Oct, 2023', likes: 189, comments: 32, isPinned: false, isHidden: false }
-];
-
-const INITIAL_REVIEWS: ReviewItem[] = [
-    { id: '1', status: 'PUBLISHED', rating: 4.2, title: 'A new method for protein structure prediction based on Transformer...', description: 'The method proposed in this paper has achieved significant improvements in protein structure prediction. The experimental design is reasonable and the results are convincing.', publicationDate: 'OCT, 2023' },
-    { id: '2', status: 'PUBLISHED', rating: 4.2, title: 'A new method for protein structure prediction based on Transformer', description: 'The method proposed in this paper has achieved significant improvements in protein structure prediction.', publicationDate: 'OCT, 2023' }
-];
-
-// --- Main Component ---
 
 export const Profile: React.FC = () => {
     const { wallet } = useWallet();
@@ -59,8 +29,12 @@ export const Profile: React.FC = () => {
     const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
     const [isScholarModalOpen, setIsScholarModalOpen] = useState(false);
     
+    // Delete Confirmation State
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [storyToDeleteId, setStoryToDeleteId] = useState<string | null>(null);
+    
     // Data State
-    const [profileData, setProfileData] = useState(INITIAL_PROFILE);
+    const [profileData, setProfileData] = useState<UserProfile>(INITIAL_PROFILE);
     const [stories, setStories] = useState<StoryItem[]>(INITIAL_STORIES);
     const [idaArticles, setIdaArticles] = useState<IdaArticle[]>(INITIAL_IDA);
     const [reviews, setReviews] = useState<ReviewItem[]>(INITIAL_REVIEWS);
@@ -85,12 +59,24 @@ export const Profile: React.FC = () => {
     const handleStoryHandlers = {
         add: () => { setEditingStory(null); setIsStoryModalOpen(true); },
         edit: (item: StoryItem) => { setEditingStory(item); setIsStoryModalOpen(true); },
-        delete: (id: string) => { if (confirm('Are you sure?')) { setStories(prev => prev.filter(s => s.id !== id)); showToast('Deleted'); } },
+        delete: (id: string) => { 
+            setStoryToDeleteId(id);
+            setIsDeleteModalOpen(true);
+        },
         save: (data: { time: string; title: string; description: string }) => {
             if (editingStory) setStories(prev => prev.map(s => s.id === editingStory.id ? { ...s, date: data.time, title: data.title, description: data.description } : s));
             else setStories(prev => [{ id: Date.now().toString(), date: data.time, title: data.title, description: data.description }, ...prev]);
             showToast(editingStory ? 'Updated' : 'Added');
             setIsStoryModalOpen(false);
+        }
+    };
+
+    const confirmDeleteStory = () => {
+        if (storyToDeleteId) {
+            setStories(prev => prev.filter(s => s.id !== storyToDeleteId));
+            showToast('Story deleted successfully');
+            setIsDeleteModalOpen(false);
+            setStoryToDeleteId(null);
         }
     };
 
@@ -165,7 +151,7 @@ export const Profile: React.FC = () => {
                             
                             <div className="flex flex-col gap-6">
                                 <TagSection title="Research Fields" tags={profileData.researchFields} onAdd={handleAddResearch} onRemove={i => setProfileData(p => ({...p, researchFields: p.researchFields.filter((_, idx) => idx !== i)}))} />
-                                <TagSection title="Subjects" tags={profileData.subjects} onAdd={handleAddSubject} onRemove={i => setProfileData(p => ({...p, subjects: p.subjects.filter((_, idx) => idx !== i)}))} bgClass="bg-white" />
+                                <TagSection title="Subjects" tags={profileData.subjects} onAdd={handleAddSubject} onRemove={i => setProfileData(p => ({...p, subjects: p.subjects.filter((_, idx) => idx !== i)}))} />
                             </div>
                         </div>
 
@@ -188,8 +174,16 @@ export const Profile: React.FC = () => {
             </div>
 
             <EditProfileModal isOpen={isEditProfileOpen} onClose={() => setIsEditProfileOpen(false)} initialData={profileData} onSave={(data) => { setProfileData(data); setIsEditProfileOpen(false); showToast('Profile updated'); }} />
-            <AddStoryModal isOpen={isStoryModalOpen} onClose={() => setIsStoryModalOpen(false)} onSave={handleStoryHandlers.save} />
+            <AddStoryModal isOpen={isStoryModalOpen} onClose={() => setIsStoryModalOpen(false)} initialData={editingStory ? { time: editingStory.date, title: editingStory.title, description: editingStory.description } : null} onSave={handleStoryHandlers.save} />
             <PlatformVerificationModal isOpen={isScholarModalOpen} onClose={() => setIsScholarModalOpen(false)} platformName="Google Scholar" onVerify={(link) => { setScholarLink(link); showToast('Verified'); }} />
+            
+            <DeleteConfirmationModal 
+                isOpen={isDeleteModalOpen} 
+                onClose={() => setIsDeleteModalOpen(false)} 
+                onConfirm={confirmDeleteStory} 
+                title="Delete Story"
+                message="Are you sure you want to remove this milestone from your story? This action cannot be undone."
+            />
         </div>
     );
 };

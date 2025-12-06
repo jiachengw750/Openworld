@@ -43,7 +43,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, customLink, s
       <div>
         {/* 1. Status Pill */}
         <div className="mb-6">
-            <div className="inline-flex items-center px-3 py-1.5 border border-ink/20 rounded-sm text-xs font-mono font-bold uppercase tracking-widest text-ink bg-white group-hover:border-ink/40 transition-colors">
+            <div className="inline-flex items-center px-3 py-1.5 border border-ink/20 rounded-sm text-xs font-mono font-bold uppercase tracking-widest text-ink bg-transparent group-hover:border-ink/40 transition-colors">
                 <StatusIcon size={14} className="mr-2" />
                 {label}
             </div>
