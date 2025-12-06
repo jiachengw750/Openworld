@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Beaker } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -28,22 +29,22 @@ export const Footer: React.FC = () => {
 
         <div className="space-y-6">
           <h4 className="font-mono text-paper dark:text-ink text-base font-semibold uppercase tracking-widest">Docs & Resources</h4>
-          <ul className="space-y-3 text-sm font-medium text-paper/70 dark:text-ink/60">
-            <li><a href="#" className="hover:text-paper dark:hover:text-ink hover:opacity-100 transition-colors">Navigation</a></li>
-            <li><Link to="/" className="hover:text-paper dark:hover:text-ink hover:opacity-100 transition-colors">Home</Link></li>
-            <li><a href="#" className="hover:text-paper dark:hover:text-ink hover:opacity-100 transition-colors">Active Grants</a></li>
-            <li><a href="#" className="hover:text-paper dark:hover:text-ink hover:opacity-100 transition-colors">About WLA</a></li>
-            <li><a href="#" className="hover:text-paper dark:hover:text-ink hover:opacity-100 transition-colors">Test Net</a></li>
-          </ul>
+          <div className="flex flex-col space-y-3 text-sm font-medium text-paper/70 dark:text-ink/60">
+            <span className="hover:text-paper dark:hover:text-ink hover:opacity-100 transition-colors cursor-pointer w-fit">Navigation</span>
+            <Link to="/" className="hover:text-paper dark:hover:text-ink hover:opacity-100 transition-colors w-fit">Home</Link>
+            <span className="hover:text-paper dark:hover:text-ink hover:opacity-100 transition-colors cursor-pointer w-fit">Active Grants</span>
+            <span className="hover:text-paper dark:hover:text-ink hover:opacity-100 transition-colors cursor-pointer w-fit">About WLA</span>
+            <span className="hover:text-paper dark:hover:text-ink hover:opacity-100 transition-colors cursor-pointer w-fit">Test Net</span>
+          </div>
         </div>
 
         <div className="space-y-6">
           <h4 className="font-mono text-paper dark:text-ink text-base font-semibold uppercase tracking-widest">Community & Contact</h4>
-          <ul className="space-y-3 text-sm font-medium text-paper/70 dark:text-ink/60">
-            <li><a href="#" className="hover:text-paper dark:hover:text-ink hover:opacity-100 transition-colors">X</a></li>
-            <li><a href="#" className="hover:text-paper dark:hover:text-ink hover:opacity-100 transition-colors">Telegram</a></li>
-            <li><a href="#" className="hover:text-paper dark:hover:text-ink hover:opacity-100 transition-colors">Discord</a></li>
-          </ul>
+          <div className="flex flex-col space-y-3 text-sm font-medium text-paper/70 dark:text-ink/60">
+            <span className="hover:text-paper dark:hover:text-ink hover:opacity-100 transition-colors cursor-pointer w-fit">X</span>
+            <span className="hover:text-paper dark:hover:text-ink hover:opacity-100 transition-colors cursor-pointer w-fit">Telegram</span>
+            <span className="hover:text-paper dark:hover:text-ink hover:opacity-100 transition-colors cursor-pointer w-fit">Discord</span>
+          </div>
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect } from 'react';
-import { X, Calendar, Loader2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, Calendar, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface AddStoryModalProps {
   isOpen: boolean;
@@ -14,6 +14,11 @@ export const AddStoryModal: React.FC<AddStoryModalProps> = ({ isOpen, onClose, o
   const [description, setDescription] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
+  // Date Picker State
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [pickerYear, setPickerYear] = useState(new Date().getFullYear());
+  const dateContainerRef = useRef<HTMLDivElement>(null);
+
   // Reset fields when opening
   useEffect(() => {
     if (isOpen) {
@@ -21,8 +26,26 @@ export const AddStoryModal: React.FC<AddStoryModalProps> = ({ isOpen, onClose, o
         setTitle('');
         setDescription('');
         setIsSaving(false);
+        setPickerYear(new Date().getFullYear());
+        setIsDatePickerOpen(false);
     }
   }, [isOpen]);
+
+  // Click outside handler for date picker
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dateContainerRef.current && !dateContainerRef.current.contains(event.target as Node)) {
+        setIsDatePickerOpen(false);
+      }
+    };
+
+    if (isDatePickerOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDatePickerOpen]);
 
   if (!isOpen) return null;
 
@@ -38,6 +61,18 @@ export const AddStoryModal: React.FC<AddStoryModalProps> = ({ isOpen, onClose, o
         onClose();
     }, 1000);
   };
+
+  const handleMonthSelect = (monthIndex: number) => {
+    const date = new Date(pickerYear, monthIndex);
+    const monthStr = date.toLocaleString('en-US', { month: 'short' });
+    setTime(`${monthStr}, ${pickerYear}`);
+    setIsDatePickerOpen(false);
+  };
+
+  const months = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-ink/70 backdrop-blur-md animate-in fade-in duration-300">
@@ -60,15 +95,56 @@ export const AddStoryModal: React.FC<AddStoryModalProps> = ({ isOpen, onClose, o
             {/* Time Field */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                 <label className="md:col-span-2 font-sans text-base font-medium text-ink">Time</label>
-                <div className="md:col-span-4 relative group">
-                    <input
-                        type="text"
-                        placeholder="yyyy/mm"
-                        value={time}
-                        onChange={(e) => setTime(e.target.value)}
-                        className="w-full border border-ink/10 bg-surface p-3 pr-10 font-mono text-sm text-ink placeholder-ink/30 focus:outline-none focus:border-blue-500 rounded-sm transition-all"
-                    />
-                    <Calendar size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-ink/40 pointer-events-none group-focus-within:text-blue-500 transition-colors" />
+                <div className="md:col-span-4 relative group" ref={dateContainerRef}>
+                    <div onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}>
+                        <input
+                            type="text"
+                            placeholder="Select Date"
+                            value={time}
+                            readOnly
+                            className="w-full border border-ink/10 bg-surface p-3 pr-10 font-mono text-sm text-ink placeholder-ink/30 focus:outline-none focus:border-blue-500 rounded-sm transition-all cursor-pointer"
+                        />
+                        <Calendar size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-ink/40 pointer-events-none group-focus-within:text-blue-500 transition-colors" />
+                    </div>
+
+                    {/* Custom Date Picker Dropdown */}
+                    {isDatePickerOpen && (
+                        <div className="absolute top-full left-0 mt-2 w-64 bg-paper border border-ink/10 shadow-2xl rounded-sm z-50 p-4 animate-in fade-in slide-in-from-top-2">
+                            {/* Year Selector */}
+                            <div className="flex justify-between items-center mb-4 pb-2 border-b border-ink/5">
+                                <button 
+                                    onClick={() => setPickerYear(prev => prev - 1)}
+                                    className="p-1 hover:bg-stone/5 rounded-full text-ink/60 hover:text-ink transition-colors"
+                                >
+                                    <ChevronLeft size={16} />
+                                </button>
+                                <span className="font-mono text-base font-bold text-ink">{pickerYear}</span>
+                                <button 
+                                    onClick={() => setPickerYear(prev => prev + 1)}
+                                    className="p-1 hover:bg-stone/5 rounded-full text-ink/60 hover:text-ink transition-colors"
+                                >
+                                    <ChevronRight size={16} />
+                                </button>
+                            </div>
+                            
+                            {/* Month Grid */}
+                            <div className="grid grid-cols-3 gap-2">
+                                {months.map((m, idx) => (
+                                    <button
+                                        key={m}
+                                        onClick={() => handleMonthSelect(idx)}
+                                        className={`py-2 text-xs font-mono font-bold uppercase rounded-sm transition-colors ${
+                                            time.startsWith(m) && time.includes(pickerYear.toString())
+                                                ? 'bg-ink text-paper'
+                                                : 'hover:bg-stone/10 text-ink/70 hover:text-ink'
+                                        }`}
+                                    >
+                                        {m}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
