@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ArrowLeft, Edit3, Github, Linkedin, Twitter,
-  GraduationCap, Fingerprint, Verified, Camera
+  GraduationCap, Fingerprint, Verified, Camera, Calendar
 } from 'lucide-react';
 import { useWallet } from '../context/WalletContext';
 import { useToast } from '../context/ToastContext';
@@ -152,6 +152,12 @@ export const Profile: React.FC = () => {
                             <div className="flex flex-col gap-6">
                                 <TagSection title="Research Fields" tags={profileData.researchFields} onAdd={handleAddResearch} onRemove={i => setProfileData(p => ({...p, researchFields: p.researchFields.filter((_, idx) => idx !== i)}))} />
                                 <TagSection title="Subjects" tags={profileData.subjects} onAdd={handleAddSubject} onRemove={i => setProfileData(p => ({...p, subjects: p.subjects.filter((_, idx) => idx !== i)}))} />
+                            </div>
+                            
+                            <div className="flex items-center gap-3 mt-[22px] w-fit pr-8">
+                                <Calendar size={16} className="text-ink/40" />
+                                <span className="font-sans text-base text-ink/50">Date Joined</span>
+                                <span className="font-sans text-base font-bold text-ink">{profileData.joinDate?.replace(',', '')}</span>
                             </div>
                         </div>
 
