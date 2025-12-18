@@ -6,7 +6,7 @@ import { MessageSquare, Verified, ArrowRight } from 'lucide-react';
 
 interface QuestCardProps {
     quest: Quest;
-    onClick?: () => void; // Optional now
+    onClick?: () => void;
 }
 
 export const QuestCard: React.FC<QuestCardProps> = ({ quest }) => {
@@ -36,7 +36,7 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest }) => {
     return (
         <Link 
             to={`/quest/${quest.id}`}
-            className="block group bg-paper border border-ink/10 p-6 md:p-8 hover:border-ink/40 hover:shadow-lg transition-all duration-300 cursor-pointer relative"
+            className="block group bg-paper border-b border-ink/10 p-6 md:p-8 hover:bg-stone/5 transition-all duration-300 cursor-pointer relative"
         >
             {/* Header: Status & Tags */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">

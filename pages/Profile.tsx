@@ -107,7 +107,7 @@ export const Profile: React.FC = () => {
                     </Link>
                     <h1 className="font-sans text-5xl md:text-7xl font-bold text-ink mb-4">Profile</h1>
                     <p className="font-sans text-ink/70 max-w-2xl text-xl leading-relaxed">
-                        Manage your personal data
+                        Manage your personal data to keep your information up to date
                     </p>
                 </div>
             </div>

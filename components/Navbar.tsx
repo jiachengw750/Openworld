@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useRef } from 'react';
-import { Beaker, Sun, Moon, Wallet, ChevronDown, Check, Copy, LogOut, Heart, Settings, FlaskConical, User, LayoutDashboard, PlusCircle } from 'lucide-react';
+import { Beaker, Sun, Moon, Wallet, ChevronDown, Check, Copy, LogOut, Heart, Settings, FlaskConical, User, LayoutDashboard, PlusCircle, UserPlus, Eye } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useWallet } from '../context/WalletContext';
 import { useToast } from '../context/ToastContext';
@@ -246,6 +246,24 @@ export const Navbar: React.FC = () => {
                             >
                                 <span className="font-mono text-base font-bold text-ink/80 group-hover:text-ink">Donations</span>
                                 <Heart size={20} strokeWidth={1.5} className="text-ink/40 group-hover:text-ink transition-colors" />
+                            </Link>
+
+                            <Link 
+                                to="/invite" 
+                                onClick={() => setIsMenuOpen(false)}
+                                className="px-6 py-4 flex justify-between items-center group hover:bg-stone/5 transition-colors"
+                            >
+                                <span className="font-mono text-base font-bold text-ink/80 group-hover:text-ink">Invite Friends</span>
+                                <UserPlus size={20} strokeWidth={1.5} className="text-ink/40 group-hover:text-ink transition-colors" />
+                            </Link>
+
+                            <Link 
+                                to="/accept-invite"
+                                onClick={() => setIsMenuOpen(false)}
+                                className="px-6 py-4 flex justify-between items-center group hover:bg-stone/5 transition-colors border-t border-ink/5"
+                            >
+                                <span className="font-mono text-base font-bold text-ink/80 group-hover:text-ink">View as Invitee</span>
+                                <Eye size={20} strokeWidth={1.5} className="text-ink/40 group-hover:text-ink transition-colors" />
                             </Link>
 
                             <div 

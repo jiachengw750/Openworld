@@ -1,5 +1,4 @@
 
-
 import React, { useState, useRef, useEffect } from 'react';
 import { QUESTS } from '../constants';
 import { QuestCard } from '../components/quest/QuestCard';
@@ -196,7 +195,7 @@ export const QuestPage: React.FC = () => {
 
             {/* Feed */}
             <div className="max-w-[1512px] mx-auto px-6 md:px-12 mt-8">
-                 <div className="flex flex-col gap-6">
+                 <div className="flex flex-col border-t border-ink/10">
                      {filteredQuests.length > 0 ? (
                         filteredQuests.map((quest) => (
                             <QuestCard 
@@ -205,7 +204,7 @@ export const QuestPage: React.FC = () => {
                             />
                         ))
                      ) : (
-                        <div className="py-24 text-center border border-dashed border-ink/10 rounded-sm bg-stone/5">
+                        <div className="py-24 text-center border-b border-dashed border-ink/10 bg-stone/5">
                             <h3 className="text-xl font-sans font-bold text-ink mb-2">No tasks found</h3>
                             <p className="text-ink/50 font-mono text-sm">Try adjusting your filters.</p>
                         </div>

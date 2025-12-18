@@ -17,6 +17,9 @@ import { Profile } from './pages/Profile';
 import { CreateQuest } from './pages/CreateQuest';
 import { QuestSelection } from './pages/QuestSelection';
 import { QuestConsole } from './pages/QuestConsole';
+import { InviteFriends } from './pages/InviteFriends';
+import { AcceptInvite } from './pages/AcceptInvite';
+import { BidderDetails } from './pages/BidderDetails'; // New Import
 import { WalletProvider } from './context/WalletContext';
 import { ToastProvider } from './context/ToastContext';
 
@@ -38,9 +41,12 @@ const App: React.FC = () => {
                 <Route path="/my-projects" element={<MyProjects />} />
                 <Route path="/my-projects/:id/manage" element={<ProjectManagement />} />
                 <Route path="/my-wallet" element={<MyWallet />} />
+                <Route path="/invite" element={<InviteFriends />} />
+                <Route path="/accept-invite" element={<AcceptInvite />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/workspace" element={<Workspace />} />
                 <Route path="/workspace/quest/:id/selection" element={<QuestSelection />} />
+                <Route path="/workspace/quest/:id/selection/:bidderId" element={<BidderDetails />} /> {/* New Route */}
                 <Route path="/workspace/quest/:id/console" element={<QuestConsole />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="*" element={<Navigate to="/" replace />} />

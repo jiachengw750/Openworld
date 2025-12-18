@@ -1,525 +1,5 @@
 
-
 import { Project, DonationVoucher, Quest, UserProfile, StoryItem, IdaArticle, ReviewItem } from './types';
-
-export const PROJECTS: Project[] = [
-  {
-    id: '1',
-    title: 'Mycoremediation: Plastic Eating Fungi',
-    shortDescription: 'Engineering Pestalotiopsis microspora to break down polyurethane plastics in marine environments at 3x speed.',
-    fullDescription: `Plastic pollution is one of the most pressing environmental challenges of our time. Our team at the Institute of Biotechnology has isolated a strain of Pestalotiopsis microspora, a fungus capable of surviving solely on polyurethane. 
-
-    This project aims to genetically enhance the enzymatic pathways of this fungus to accelerate the degradation process. Our preliminary lab results show a 15% reduction in mass over 2 weeks. With your funding, we can scale this to a pilot bioreactor study simulating ocean conditions.
-    
-    The implications for waste management are revolutionary. Unlike incineration, this is a biological cold-process that yields non-toxic biomass as a byproduct. We are focusing specifically on microplastics filtration systems where traditional mechanical removal fails.`,
-    category: 'GRANTS',
-    tags: ['Biotech', 'Ocean Clean-up', 'Genetics'],
-    status: 'RESEARCH',
-    image: 'https://picsum.photos/800/600?random=1',
-    raised: 120000,
-    goal: 120000,
-    backers: 342,
-    daysLeft: 14,
-    author: 'Dr. Elena Vossen',
-    authorAvatar: 'https://i.pravatar.cc/150?u=1',
-    authorBio: 'Marine biologist with 15 years experience in enzymatic plastic degradation.',
-    institution: 'Delft University of Technology',
-    team: [
-        { 
-            name: "Dr. Elena Vossen", 
-            role: "Principal Investigator", 
-            institution: "TU Delft",
-            avatar: "https://i.pravatar.cc/150?u=1",
-            bio: "Specializes in fungal enzymes and marine ecosystems.",
-            awards: ["Nobel Spirit 2022", "Green Tech Lead"]
-        },
-        { 
-            name: "James Chen", 
-            role: "Lead Mycologist", 
-            institution: "TU Delft",
-            avatar: "https://i.pravatar.cc/150?u=12",
-            bio: "Expert in genetic modification of fungal strains.",
-            awards: ["BioFuture Prize"]
-        },
-        { 
-            name: "Sarah Miller", 
-            role: "Process Engineer", 
-            institution: "MIT",
-            avatar: "https://i.pravatar.cc/150?u=13",
-            bio: "Focuses on bioreactor scaling and filtration systems.",
-            awards: []
-        }
-    ],
-    impactStats: [
-        { label: "Degradation Rate", value: "0.5g/hr" },
-        { label: "Target Plastic", value: "Polyurethane" },
-        { label: "Biosafety Level", value: "BSL-1" }
-    ],
-    milestones: [
-        { id: 'm0', title: 'Project Funding', description: 'Initial capital raised for equipment and personnel.', date: '2023-12-01', status: 'COMPLETED' },
-        { id: 'm1', title: 'Lab Verification', description: 'In vitro testing of enzyme interactions under varied thermal conditions.', date: '2024-02-15', status: 'COMPLETED' },
-        { id: 'm2', title: 'Pilot Bioreactor', description: 'Small-scale bioreactor deployment utilizing 500L containment vessels.', date: '2024-06-01', status: 'IN_PROGRESS' },
-        { id: 'm3', title: 'Ocean Simulation', description: 'Testing degradation in high-salinity, low-temp environments.', date: '2024-11-01', status: 'UPCOMING' }
-    ],
-    allocation: [
-        { category: 'Lab Equipment', description: 'High-precision incubators and spectrometry units.', amount: 48000, percentage: 40 },
-        { category: 'Personnel', description: 'Salaries for 2 post-doc researchers for 12 months.', amount: 36000, percentage: 30 },
-        { category: 'Sequencing Costs', description: 'Next-gen genomic sequencing services.', amount: 24000, percentage: 20 },
-        { category: 'Admin & Overhead', description: 'University overheads and administrative fees.', amount: 12000, percentage: 10 }
-    ],
-    ida: {
-        name: "MycoClean DAO",
-        contractAddress: "0x71C...9A23",
-        ownerAddress: "0xB21...889K"
-    },
-    donations: [
-        { id: 'd1', donor: 'Alice Foundation', amount: 5000, date: '2 days ago', avatar: 'https://i.pravatar.cc/150?u=60' },
-        { id: 'd2', donor: 'Green Earth VC', amount: 2500, date: '5 days ago', avatar: 'https://i.pravatar.cc/150?u=61' },
-        { id: 'd3', donor: 'Anonymous', amount: 1000, date: '1 week ago', avatar: 'https://i.pravatar.cc/150?u=62' },
-        { id: 'd4', donor: 'Dr. House', amount: 500, date: '1 week ago', avatar: 'https://i.pravatar.cc/150?u=63' },
-        { id: 'd5', donor: 'Jane Doe', amount: 250, date: '2 weeks ago', avatar: 'https://i.pravatar.cc/150?u=64' }
-    ]
-  },
-  {
-    id: '2',
-    title: 'Atmospheric Aerosol Injection Arrays',
-    shortDescription: 'Developing localized, reversible solar radiation management tools using biodegradable calcium carbonate particles.',
-    fullDescription: `Solar geoengineering proposals often involve massive, irreversible global interventions. We propose a localized, controlled approach. By utilizing high-altitude drone arrays to disperse calcium carbonate (chalk) particles, we can temporarily reflect sunlight to cool specific heat islands or protect bleaching coral reefs.
-    
-    Unlike sulfur dioxide, calcium carbonate is not ozone-depleting. Our "Cloud-Whitening" project focuses on the hardware deployment mechanism: autonomous drone swarms that coordinate dispersal patterns based on real-time satellite weather data.`,
-    category: 'WLS(LIVE)',
-    tags: ['Geoengineering', 'Climate Hardware', 'Drones'],
-    status: 'FUNDING',
-    image: 'https://picsum.photos/800/600?random=2',
-    raised: 12500,
-    goal: 50000,
-    backers: 89,
-    daysLeft: 30,
-    author: 'Prof. Marcus Thorne',
-    authorAvatar: 'https://i.pravatar.cc/150?u=2',
-    authorBio: 'Atmospheric physicist specializing in solar radiation management.',
-    institution: 'Cambridge Climate Repair Centre',
-    team: [
-        { 
-            name: "Prof. Marcus Thorne", 
-            role: "Project Lead", 
-            institution: "Cambridge",
-            avatar: "https://i.pravatar.cc/150?u=2",
-            bio: "20 years research in atmospheric dynamics.",
-            awards: ["Climate Hero 2023", "Physics Nobel"]
-        },
-        { 
-            name: "Dr. Aarya Singh", 
-            role: "Atmospheric Physicist", 
-            institution: "Oxford",
-            avatar: "https://i.pravatar.cc/150?u=22",
-            bio: "Simulating particle dispersion models.",
-            awards: ["Royal Society Fellow"]
-        }
-    ],
-    impactStats: [
-        { label: "Reflectivity", value: "+12% Albedo" },
-        { label: "Particle Size", value: "0.5 microns" },
-        { label: "Deployment", value: "Drone Swarm" }
-    ],
-    milestones: [
-        { id: 'm0', title: 'Crowdfunding', description: 'Raising initial capital from the public.', date: '2024-03-01', status: 'IN_PROGRESS' },
-        { id: 'm1', title: 'Seed Funding', description: 'Securing funds for drone prototypes and materials.', date: '2024-04-15', status: 'UPCOMING' },
-        { id: 'm2', title: 'Drone Prototyping', description: 'Building custom high-altitude dispersal drones.', date: '2024-06-01', status: 'UPCOMING' },
-        { id: 'm3', title: 'Controlled Field Test', description: 'Testing dispersal over non-sensitive desert regions.', date: '2024-09-01', status: 'UPCOMING' }
-    ],
-    allocation: [
-        { category: 'Hardware (Drones)', description: 'Components for 5 custom high-altitude drones.', amount: 25000, percentage: 50 },
-        { category: 'Software Dev', description: 'Swarm coordination algorithm development.', amount: 10000, percentage: 20 },
-        { category: 'Field Logistics', description: 'Travel and permits for desert testing site.', amount: 10000, percentage: 20 },
-        { category: 'Safety Analysis', description: 'Environmental impact assessment studies.', amount: 5000, percentage: 10 }
-    ],
-    ida: {
-        name: "AtmosphereDAO",
-        contractAddress: "0x88A...11B2",
-        ownerAddress: "0xCC2...990L"
-    },
-    donations: [
-        { id: 'd1', donor: 'Future Ventures', amount: 5000, date: '1 day ago', avatar: 'https://i.pravatar.cc/150?u=70' },
-        { id: 'd2', donor: 'Climate Collective', amount: 2000, date: '3 days ago', avatar: 'https://i.pravatar.cc/150?u=71' },
-        { id: 'd3', donor: 'Bob Smith', amount: 100, date: '1 week ago', avatar: 'https://i.pravatar.cc/150?u=72' },
-        { id: 'd4', donor: 'Alice Cooper', amount: 50, date: '1 week ago', avatar: 'https://i.pravatar.cc/150?u=73' },
-        { id: 'd5', donor: 'Anonymous', amount: 25, date: '2 weeks ago', avatar: 'https://i.pravatar.cc/150?u=74' }
-    ]
-  },
-  {
-    id: '3',
-    title: 'Quantum Entanglement in Neural Networks',
-    shortDescription: 'Investigating potential quantum effects in biological microtubules to understand consciousness.',
-    fullDescription: `The "Orch OR" theory proposes that consciousness originates from quantum computations in neuronal microtubules. For decades, this was dismissed due to the "warm, wet, and noisy" environment of the brain. 
-    
-    Recent discoveries in quantum biology suggest that coherence can be maintained in biological systems. We are building a high-sensitivity femtosecond laser array to detect quantum beats in isolated tubulin proteins. If successful, this rewrites the textbook on neuroscience and artificial intelligence.`,
-    category: 'QUEST',
-    tags: ['Neuroscience', 'Quantum Physics', 'Consciousness'],
-    status: 'FUNDING',
-    image: 'https://picsum.photos/800/600?random=3',
-    raised: 89000,
-    goal: 200000,
-    backers: 1205,
-    daysLeft: 45,
-    author: 'Dr. Aris Kothari',
-    authorAvatar: 'https://i.pravatar.cc/150?u=3',
-    authorBio: 'Leading researcher in quantum biology and neural coherence.',
-    institution: 'Perimeter Institute',
-    team: [
-        { 
-            name: "Dr. Aris Kothari", 
-            role: "Quantum Physicist", 
-            institution: "Perimeter",
-            avatar: "https://i.pravatar.cc/150?u=3",
-            bio: "Pioneer in biological quantum effects.",
-            awards: ["Physics Horizon"]
-        },
-        { 
-            name: "Lia Vance", 
-            role: "Neurobiologist", 
-            institution: "Stanford",
-            avatar: "https://i.pravatar.cc/150?u=32",
-            bio: "Expert in microtubule isolation.",
-            awards: []
-        }
-    ],
-    impactStats: [
-        { label: "Laser Precision", value: "10fs" },
-        { label: "Temperature", value: "310K (Body Temp)" },
-        { label: "Scale", value: "Nanoscopic" }
-    ],
-    milestones: [
-        { id: 'm0', title: 'Donation Phase', description: 'Gathering required funds for laser apparatus.', date: '2023-11-01', status: 'IN_PROGRESS' },
-        { id: 'm1', title: 'Tubulin Isolation', description: 'Extracting pure microtubules for testing.', date: '2024-03-01', status: 'UPCOMING' },
-        { id: 'm2', title: 'Quantum Beat Detection', description: 'Running the primary laser experiments.', date: '2024-08-01', status: 'UPCOMING' }
-    ],
-    allocation: [
-        { category: 'Laser Equipment', description: 'Femtosecond laser array and optical tables.', amount: 120000, percentage: 60 },
-        { category: 'Research Staff', description: 'Post-doctoral fellows and lab assistants.', amount: 50000, percentage: 25 },
-        { category: 'Lab Space', description: 'Rental and maintenance of cleanroom facilities.', amount: 20000, percentage: 10 },
-        { category: 'Publications', description: 'Open access fees and conference travel.', amount: 10000, percentage: 5 }
-    ],
-    ida: {
-        name: "QuantumMind Org",
-        contractAddress: "0x11B...33C1",
-        ownerAddress: "0xD44...555M"
-    },
-    donations: [
-        { id: 'd1', donor: 'NeuroTech Fund', amount: 10000, date: '1 day ago', avatar: 'https://i.pravatar.cc/150?u=80' },
-        { id: 'd2', donor: 'Physics Lovers', amount: 500, date: '2 days ago', avatar: 'https://i.pravatar.cc/150?u=81' },
-        { id: 'd3', donor: 'Anonymous', amount: 250, date: '3 days ago', avatar: 'https://i.pravatar.cc/150?u=82' },
-        { id: 'd4', donor: 'Sarah J.', amount: 100, date: '3 days ago', avatar: 'https://i.pravatar.cc/150?u=83' }
-    ]
-  },
-  {
-    id: '4',
-    title: 'Autonomous Reforestation Swarm',
-    shortDescription: 'Deploying AI-driven drone swarms to plant 1 million trees in deforested regions of the Amazon.',
-    fullDescription: 'Deforestation is accelerating at an alarming rate. Manual replanting is too slow and expensive. We are developing a swarm of autonomous drones capable of analyzing soil data and planting seed pods in optimal locations. This project aims to restore biodiversity and combat climate change on a massive scale.',
-    category: 'AI TOOLS',
-    tags: ['Reforestation', 'AI', 'Drones'],
-    status: 'PRE_LAUNCH',
-    image: 'https://picsum.photos/800/600?random=4',
-    raised: 0,
-    goal: 150000,
-    backers: 0,
-    daysLeft: 0,
-    startTime: '2024-06-01',
-    author: 'Dr. Maria Gonzalez',
-    authorAvatar: 'https://i.pravatar.cc/150?u=4',
-    authorBio: 'Ecologist and robotics engineer.',
-    institution: 'Amazon Conservation Team',
-    team: [],
-    impactStats: [],
-    milestones: [],
-    allocation: [],
-    ida: { name: 'ForestDAO', contractAddress: '0x...', ownerAddress: '0x...' },
-    donations: []
-  },
-  {
-    id: '5',
-    title: 'CRISPR Cure for Sickle Cell',
-    shortDescription: 'Clinical trials for a low-cost CRISPR-based gene therapy for Sickle Cell Disease.',
-    fullDescription: 'Sickle Cell Disease affects millions worldwide. Current treatments are expensive and often inaccessible. We are developing a novel CRISPR-Cas9 delivery system that can be administered via a simple injection, potentially curing the disease at a fraction of the cost.',
-    category: 'GRANTS',
-    tags: ['Biotech', 'Gene Therapy', 'Healthcare'],
-    status: 'RESEARCH',
-    image: 'https://picsum.photos/800/600?random=5',
-    raised: 250000,
-    goal: 250000,
-    backers: 512,
-    daysLeft: 60,
-    author: 'Dr. Samuel Okafor',
-    authorAvatar: 'https://i.pravatar.cc/150?u=5',
-    authorBio: 'Hematologist and geneticist.',
-    institution: 'Lagos University Teaching Hospital',
-    team: [],
-    impactStats: [],
-    milestones: [
-         { id: 'm0', title: 'Phase 1 Trials', description: 'Safety testing in small group.', date: '2024-01-15', status: 'COMPLETED' },
-         { id: 'm1', title: 'Phase 2 Trials', description: 'Efficacy testing in larger group.', date: '2024-06-01', status: 'IN_PROGRESS' }
-    ],
-    allocation: [],
-    ida: { name: 'HealthDAO', contractAddress: '0x...', ownerAddress: '0x...' },
-    donations: []
-  },
-  {
-    id: '6',
-    title: 'Fusion Energy Prototype',
-    shortDescription: 'Building a compact magnetic confinement fusion reactor to demonstrate net energy gain.',
-    fullDescription: 'Fusion energy is the holy grail of clean power. We are constructing a compact, high-field tokamak reactor using high-temperature superconducting magnets. Our goal is to achieve a Q-factor greater than 1, demonstrating net energy gain.',
-    category: 'PRIZE',
-    tags: ['Energy', 'Fusion', 'Physics'],
-    status: 'COMPLETED',
-    image: 'https://picsum.photos/800/600?random=6',
-    raised: 500000,
-    goal: 500000,
-    backers: 2500,
-    daysLeft: 0,
-    author: 'Dr. Hiroshi Tanaka',
-    authorAvatar: 'https://i.pravatar.cc/150?u=6',
-    authorBio: 'Plasma physicist.',
-    institution: 'ITER Organization',
-    team: [],
-    impactStats: [],
-    milestones: [
-        { id: 'm0', title: 'Construction', description: 'Building the reactor.', date: '2023-01-01', status: 'COMPLETED' },
-        { id: 'm1', title: 'First Plasma', description: 'Generating plasma.', date: '2023-06-01', status: 'COMPLETED' },
-        { id: 'm2', title: 'Net Gain', description: 'Achieving Q > 1.', date: '2024-01-01', status: 'COMPLETED' }
-    ],
-    allocation: [],
-    ida: { name: 'FusionDAO', contractAddress: '0x...', ownerAddress: '0x...' },
-    donations: []
-  },
-  {
-    id: '7',
-    title: 'Ocean Acidification Monitors',
-    shortDescription: 'A network of low-cost, open-source buoys to monitor ocean acidity in real-time.',
-    fullDescription: 'Ocean acidification threatens marine life. We are deploying a network of open-source sensor buoys to provide real-time data to researchers worldwide. This data is crucial for understanding the scope of the problem and developing mitigation strategies.',
-    category: 'AI TOOLS',
-    tags: ['Ocean', 'Climate Change', 'Open Source'],
-    status: 'FUNDING',
-    image: 'https://picsum.photos/800/600?random=7',
-    raised: 15000,
-    goal: 30000,
-    backers: 120,
-    daysLeft: 20,
-    author: 'Sarah Jenkins',
-    authorAvatar: 'https://i.pravatar.cc/150?u=7',
-    authorBio: 'Oceanographer and data scientist.',
-    institution: 'Scripps Institution of Oceanography',
-    team: [],
-    impactStats: [],
-    milestones: [],
-    allocation: [],
-    ida: { name: 'OceanDAO', contractAddress: '0x...', ownerAddress: '0x...' },
-    donations: []
-  },
-  {
-    id: '8',
-    title: 'Biodegradable Electronics',
-    shortDescription: 'Developing transient electronic components that dissolve completely in water.',
-    fullDescription: 'E-waste is a growing global crisis. We are creating fully biodegradable electronic components using silk protein and magnesium. These devices can be used for temporary environmental sensors or medical implants that do not require surgical removal.',
-    category: 'GRANTS',
-    tags: ['Materials Science', 'Sustainability', 'Electronics'],
-    status: 'RESEARCH',
-    image: 'https://picsum.photos/800/600?random=8',
-    raised: 60000,
-    goal: 60000,
-    backers: 210,
-    daysLeft: 40,
-    author: 'Dr. Wei Zhang',
-    authorAvatar: 'https://i.pravatar.cc/150?u=8',
-    authorBio: 'Materials scientist.',
-    institution: 'Tsinghua University',
-    team: [],
-    impactStats: [],
-    milestones: [
-        { id: 'm0', title: 'Material Synthesis', description: 'Developing silk-magnesium composite.', date: '2023-09-01', status: 'COMPLETED' },
-        { id: 'm1', title: 'Prototype', description: 'Creating the first working circuit.', date: '2024-02-01', status: 'IN_PROGRESS' }
-    ],
-    allocation: [],
-    ida: { name: 'GreenTechDAO', contractAddress: '0x...', ownerAddress: '0x...' },
-    donations: []
-  },
-  {
-    id: '9',
-    title: 'AI for Early Cancer Detection',
-    shortDescription: 'Training deep learning models on MRI scans to detect tumors at stage 0.',
-    fullDescription: 'Early detection saves lives. We are training state-of-the-art deep learning models on a massive dataset of MRI scans to identify micro-tumors that are invisible to the human eye. Our goal is to provide a low-cost diagnostic tool for clinics worldwide.',
-    category: 'AI TOOLS',
-    tags: ['Healthcare', 'AI', 'Deep Learning'],
-    status: 'PRE_LAUNCH',
-    image: 'https://picsum.photos/800/600?random=9',
-    raised: 0,
-    goal: 100000,
-    backers: 0,
-    daysLeft: 0,
-    startTime: '2024-07-15',
-    author: 'Dr. Emily Chen',
-    authorAvatar: 'https://i.pravatar.cc/150?u=9',
-    authorBio: 'Computer scientist and radiologist.',
-    institution: 'Johns Hopkins University',
-    team: [],
-    impactStats: [],
-    milestones: [],
-    allocation: [],
-    ida: { name: 'MedAI DAO', contractAddress: '0x...', ownerAddress: '0x...' },
-    donations: []
-  },
-  {
-    id: '10',
-    title: 'Cognitive Resilience in Spaceflight',
-    shortDescription: 'Monitoring and mitigating neurocognitive decline in long-duration microgravity environments.',
-    fullDescription: 'Long-duration space missions pose significant risks to the human brain. We are developing a suite of AI-driven cognitive assessment tools and neurofeedback protocols to maintain astronaut mental health during missions to Mars and beyond.',
-    category: 'WLS(LIVE)',
-    tags: ['Neuroscience', 'Space', 'AI'],
-    status: 'RESEARCH',
-    image: 'https://picsum.photos/800/600?random=15',
-    raised: 180000,
-    goal: 180000,
-    backers: 420,
-    daysLeft: 0,
-    author: 'Dr. Aris Kothari',
-    authorAvatar: 'https://i.pravatar.cc/150?u=3',
-    authorBio: 'Leading researcher in quantum biology and neural coherence.',
-    institution: 'Perimeter Institute',
-    team: [],
-    impactStats: [],
-    milestones: [
-        { id: 'm0', title: 'Baseline Study', description: 'Collecting baseline data.', date: '2023-11-01', status: 'COMPLETED' },
-        { id: 'm1', title: 'Simulation Testing', description: 'Testing in isolation chambers.', date: '2024-03-01', status: 'IN_PROGRESS' }
-    ],
-    allocation: [],
-    ida: { name: 'AstroNeuro DAO', contractAddress: '0xAB...9988', ownerAddress: '0x...' },
-    donations: [
-        { id: 'd10', donor: 'SpaceX Fund', amount: 50000, date: '2 months ago', avatar: 'https://i.pravatar.cc/150?u=90' }
-    ]
-  }
-];
-
-export const QUESTS: Quest[] = [
-    {
-        id: 'q1',
-        title: 'Heuristic Solution and Experimental Comparison of Convex Optimization Problems',
-        shortDescription: 'Implement several heuristic algorithms and compare them with the classical baseline, producing a technical report that includes convergence curves and complexity analysis.',
-        fullDescription: 'We are seeking a researcher or data scientist to implement a set of heuristic algorithms (Genetic Algorithm, Simulated Annealing, and Particle Swarm Optimization) to solve a specific class of convex optimization problems defined in our provided whitepaper.\n\nThe goal is to benchmark these heuristics against standard gradient descent methods. Deliverables include well-documented Python code, a set of comparative plots (convergence time vs. accuracy), and a brief technical report summarizing the findings.',
-        status: 'RECRUITING',
-        tags: ['Python', 'NumPy', 'SciPy', 'Matplotlib', 'C++(Optional)'],
-        subjects: ['Math', 'Computer', 'Statistics'],
-        image: 'https://picsum.photos/800/600?random=100',
-        reward: {
-            amount: 200000,
-            currency: 'SCI',
-            usdValue: 2500
-        },
-        endTime: '2025-11-30 18:00 (GMT+8)',
-        deliveryTime: '2025-12-30 18:00 (GMT+8)',
-        bidderCount: 7,
-        bidders: [
-            'https://i.pravatar.cc/150?u=20',
-            'https://i.pravatar.cc/150?u=21',
-            'https://i.pravatar.cc/150?u=22',
-            'https://i.pravatar.cc/150?u=23',
-            'https://i.pravatar.cc/150?u=24',
-            'https://i.pravatar.cc/150?u=25',
-            'https://i.pravatar.cc/150?u=26'
-        ],
-        author: {
-            name: 'Madison Kemper',
-            avatar: 'https://i.pravatar.cc/150?u=25',
-            verified: true
-        },
-        commentsCount: 1020
-    },
-    {
-        id: 'q2',
-        title: 'High-Fidelity 3D Rendering of Molecular Docking Interactions',
-        shortDescription: 'Create a series of 4K render images and a 30-second animation demonstrating the binding mechanism of inhibitor X to Protein Y.',
-        fullDescription: 'We need a visualization expert to take PDB data files and simulation trajectories (GROMACS format) and produce high-quality visual assets for a Nature publication submission.\n\nRequirements:\n- Accurate representation of Van der Waals surfaces.\n- Highlight specific residues involved in hydrogen bonding.\n- Delivery in Blender or Maya formats.',
-        status: 'IN_PROGRESS',
-        tags: ['Blender', 'PyMOL', 'Visualization', '3D Design'],
-        subjects: ['Computer', 'Biology', 'Chemistry'],
-        image: 'https://picsum.photos/800/600?random=101',
-        reward: {
-            amount: 50000,
-            currency: 'SCI',
-            usdValue: 600
-        },
-        endTime: 'Oct 10, 2025',
-        deliveryTime: 'Oct 20, 2025',
-        bidderCount: 12,
-        bidders: [
-            'https://i.pravatar.cc/150?u=30',
-            'https://i.pravatar.cc/150?u=31',
-            'https://i.pravatar.cc/150?u=32'
-        ],
-        author: {
-            name: 'Dr. Sarah Lin',
-            avatar: 'https://i.pravatar.cc/150?u=33',
-            verified: true
-        },
-        commentsCount: 45
-    },
-    {
-        id: 'q3',
-        title: 'Systematic Literature Review on Algae-Based Biofuels (2020-2024)',
-        shortDescription: 'Compile and summarize recent advancements in genetic modification of microalgae for enhanced lipid production.',
-        fullDescription: 'We require a comprehensive literature review covering the last 4 years of research in algae biofuels. The review should focus specifically on CRISPR-Cas9 applications in lipid enhancement.\n\nDeliverable: A structured LaTeX document with at least 50 citations, summarized tables of strain yields, and a synthesis of current bottlenecks.',
-        status: 'RECRUITING',
-        tags: ['Biology', 'Research Writing', 'LaTeX', 'Review'],
-        subjects: ['Biology'],
-        image: 'https://picsum.photos/800/600?random=102',
-        reward: {
-            amount: 15000,
-            currency: 'SCI',
-            usdValue: 180
-        },
-        endTime: 'Nov 01, 2025',
-        deliveryTime: 'Nov 15, 2025',
-        bidderCount: 2,
-        bidders: [
-            'https://i.pravatar.cc/150?u=40',
-            'https://i.pravatar.cc/150?u=41'
-        ],
-        author: {
-            name: 'GreenEnergy Lab',
-            avatar: 'https://i.pravatar.cc/150?u=42',
-            verified: true
-        },
-        commentsCount: 8
-    },
-    {
-        id: 'q4',
-        title: 'Parallelization of Monte Carlo Simulations for Particle Physics',
-        shortDescription: 'Optimize existing Python code using CUDA/OpenCL to achieve at least 10x speedup on GPU clusters.',
-        fullDescription: 'Our current Monte Carlo simulation for particle decay events is bottlenecked by CPU performance. We need a developer proficient in CUDA or OpenCL to port the core calculation loop to run on NVIDIA A100 GPUs.\n\nThe existing code is written in Python (NumPy). The deliverable must verify numerical consistency within 1e-6 tolerance.',
-        status: 'COMPLETED',
-        tags: ['CUDA', 'Python', 'HPC', 'Physics'],
-        subjects: ['Physics', 'Computer'],
-        image: 'https://picsum.photos/800/600?random=103',
-        reward: {
-            amount: 500000,
-            currency: 'SCI',
-            usdValue: 6000
-        },
-        endTime: 'Sep 01, 2025',
-        deliveryTime: 'Sep 15, 2025',
-        bidderCount: 8,
-        bidders: [
-            'https://i.pravatar.cc/150?u=50',
-            'https://i.pravatar.cc/150?u=51',
-            'https://i.pravatar.cc/150?u=52'
-        ],
-        author: {
-            name: 'CERN Atlas Team',
-            avatar: 'https://i.pravatar.cc/150?u=53',
-            verified: true
-        },
-        commentsCount: 156
-    }
-];
 
 export const USER_DONATIONS: DonationVoucher[] = [
     {
@@ -557,34 +37,529 @@ export const USER_DONATIONS: DonationVoucher[] = [
     }
 ];
 
-// --- Profile Mock Data ---
+export const MOCK_BIDDERS = [
+    {
+        id: 'b1',
+        name: 'Dr. Sarah Lin',
+        institution: 'MIT Media Lab',
+        email: 'sarah.lin@media.mit.edu',
+        avatar: 'https://i.pravatar.cc/150?u=30',
+        lex: 890,
+        amount: 4800,
+        days: 7,
+        proposal: "I have extensive experience with molecular rendering using Blender and PyMOL. I can deliver 4K renders and a 60fps animation.",
+        fullProposal: `## Technical Approach
+I propose a hybrid workflow utilizing PyMOL for initial structure cleanup and surface generation, followed by Blender (Cycles engine) for high-fidelity ray tracing.
+
+### Methodology
+1. **Data Preparation**: Import GROMACS trajectories, correct bond orders, and generate solvent-accessible surface area (SASA) meshes.
+2. **Texturing**: Apply subsurface scattering (SSS) shaders to mimic the organic feel of protein structures, crucial for Nature-tier illustrations.
+3. **Animation**: Keyframe the ligand binding path based on the energy minimization steps from your simulation data.
+
+### Deliverables
+- 10x 4K Still Images (TIFF, 300 DPI)
+- 1x 60s Animation (H.264 & ProRes)
+- Blender Project Files (.blend)
+
+I have attached my portfolio demonstrating similar work for *Cell* and *Nature Chemistry*.`,
+        attachments: [
+            { name: "Portfolio_Molecular_2024.pdf", size: "12.4 MB", type: "PDF" },
+            { name: "Render_Sample_Protein.png", size: "4.2 MB", type: "IMAGE" },
+            { name: "Animation_Reel.mp4", size: "45.1 MB", type: "VIDEO" }
+        ],
+        tags: ['Expert', 'Top Rated'],
+        stats: {
+            successRate: '99%',
+            completed: 42,
+            rank: 'Top 1%'
+        }
+    },
+    {
+        id: 'b2',
+        name: 'James Chen',
+        institution: 'Stanford Biodesign',
+        email: 'j.chen@stanford.edu',
+        avatar: 'https://i.pravatar.cc/150?u=12',
+        lex: 720,
+        amount: 4500,
+        days: 10,
+        proposal: "I propose using a custom Python script to automate the frame generation from GROMACS trajectories.",
+        fullProposal: "My approach focuses on data accuracy. By scripting the import process, we ensure that every atom's position is exactly as simulated, without the interpolation errors common in manual animation.",
+        attachments: [
+            { name: "Script_Demo.py", size: "12 KB", type: "CODE" },
+            { name: "Previous_Work.pdf", size: "2.1 MB", type: "PDF" }
+        ],
+        tags: ['Fast Response'],
+        stats: {
+            successRate: '95%',
+            completed: 18,
+            rank: 'Top 10%'
+        }
+    },
+    {
+        id: 'b3',
+        name: 'BioVis Studio',
+        institution: 'Independent Agency',
+        email: 'contact@biovis.studio',
+        avatar: 'https://i.pravatar.cc/150?u=50',
+        lex: 650,
+        amount: 5000,
+        days: 5,
+        proposal: "We are a team of scientific illustrators. We can prioritize this task and deliver within 5 days.",
+        fullProposal: "As an agency, we have a dedicated render farm. This allows us to produce 4K animations in a fraction of the time. We also include a dedicated art director to ensure the visual style matches your publication requirements.",
+        attachments: [
+            { name: "Agency_Showreel.mp4", size: "120 MB", type: "VIDEO" },
+            { name: "Rate_Card.pdf", size: "1.5 MB", type: "PDF" }
+        ],
+        tags: ['Team', 'Agency'],
+        stats: {
+            successRate: '100%',
+            completed: 8,
+            rank: 'Rising Star'
+        }
+    },
+    {
+        id: 'b4',
+        name: 'Alex Rivera',
+        institution: 'Tsinghua University',
+        email: 'arivera@tsinghua.edu.cn',
+        avatar: 'https://i.pravatar.cc/150?u=60',
+        lex: 450,
+        amount: 3200,
+        days: 12,
+        proposal: "Recent grad with strong skills in Maya. Offering a lower rate to build my reputation on OpenSci.",
+        fullProposal: "I am looking to build my portfolio. I will dedicate all my time to this single project, ensuring you get unlimited revisions until you are satisfied. I specialize in Maya's molecular plugins.",
+        attachments: [
+            { name: "Student_Portfolio.pdf", size: "5.5 MB", type: "PDF" }
+        ],
+        tags: ['New', 'Budget'],
+        stats: {
+            successRate: 'N/A',
+            completed: 2,
+            rank: 'Newcomer'
+        }
+    },
+    {
+        id: 'b5',
+        name: 'Dr. Emily Zhao',
+        institution: 'Oxford University',
+        email: 'emily.zhao@bio.ox.ac.uk',
+        avatar: 'https://i.pravatar.cc/150?u=15',
+        lex: 880,
+        amount: 4900,
+        days: 8,
+        proposal: "My research focuses on protein folding. I understand the scientific nuance required for Nature publications.",
+        fullProposal: "Visual accuracy is paramount. I will verify the Van der Waals radii and hydrogen bond distances before rendering to ensure scientific validity.",
+        attachments: [],
+        tags: ['Academic', 'Expert'],
+        stats: {
+            successRate: '98%',
+            completed: 35,
+            rank: 'Top 5%'
+        }
+    },
+    {
+        id: 'b6',
+        name: 'Quantum Graphics',
+        institution: 'Design Firm',
+        email: 'hello@quantumgraphics.io',
+        avatar: 'https://i.pravatar.cc/150?u=70',
+        lex: 750,
+        amount: 5000,
+        days: 4,
+        proposal: "Rush delivery available. We have a render farm ready to process the 4K animation sequences overnight.",
+        fullProposal: "We are a boutique design firm specializing in scientific visualization. Our team consists of 3D artists with backgrounds in biology.",
+        attachments: [],
+        tags: ['Fastest', 'Agency'],
+        stats: {
+            successRate: '100%',
+            completed: 12,
+            rank: 'Pro'
+        }
+    },
+    {
+        id: 'b7',
+        name: 'Prof. David Miller',
+        institution: 'ETH Zurich',
+        email: 'dmiller@ethz.ch',
+        avatar: 'https://i.pravatar.cc/150?u=22',
+        lex: 920,
+        amount: 4600,
+        days: 9,
+        proposal: "I have developed a proprietary plugin for visualizing hydrogen bonding networks.",
+        fullProposal: "My plugin allows for dynamic visualization of H-bonds as they form and break during the docking simulation.",
+        attachments: [],
+        tags: ['Expert', 'Developer'],
+        stats: {
+            successRate: '100%',
+            completed: 50,
+            rank: 'Elite'
+        }
+    },
+    {
+        id: 'b8',
+        name: 'Yuki Tanaka',
+        institution: 'Freelance Artist',
+        email: 'yuki.art@gmail.com',
+        avatar: 'https://i.pravatar.cc/150?u=33',
+        lex: 500,
+        amount: 3000,
+        days: 14,
+        proposal: "Experienced in medical animation. My rate is lower as I am building my profile here, but quality is guaranteed.",
+        fullProposal: "I have 5 years of experience in medical animation for pharmaceutical companies. I am new to OpenSci but not to the industry.",
+        attachments: [],
+        tags: ['Value', 'Visuals'],
+        stats: {
+            successRate: '100%',
+            completed: 5,
+            rank: 'Contributor'
+        }
+    },
+    {
+        id: 'b9',
+        name: 'Neuron Collective',
+        institution: 'Research Group',
+        email: 'collab@neuron.org',
+        avatar: 'https://i.pravatar.cc/150?u=88',
+        lex: 810,
+        amount: 4800,
+        days: 6,
+        proposal: "Our lab specializes in docking simulations. We can verify the PDB data integrity before rendering.",
+        fullProposal: "We offer a scientific peer-review of the data as part of the visualization package.",
+        attachments: [],
+        tags: ['Team', 'Scientific'],
+        stats: {
+            successRate: '96%',
+            completed: 22,
+            rank: 'Verified Lab'
+        }
+    },
+    {
+        id: 'b10',
+        name: 'Dr. Aarya Singh',
+        institution: 'IIT Bombay',
+        email: 'a.singh@iitb.ac.in',
+        avatar: 'https://i.pravatar.cc/150?u=44',
+        lex: 670,
+        amount: 4000,
+        days: 10,
+        proposal: "Will use ChimeraX for initial setup and export to Blender for ray-tracing.",
+        fullProposal: "I find ChimeraX handles surface generation better than PyMOL for large complexes. I will use this workflow.",
+        attachments: [],
+        tags: ['Reliable'],
+        stats: {
+            successRate: '92%',
+            completed: 15,
+            rank: 'Veteran'
+        }
+    },
+    {
+        id: 'b11',
+        name: 'Mark O\'Connor',
+        institution: 'Cambridge PhD',
+        email: 'm.oconnor@cam.ac.uk',
+        avatar: 'https://i.pravatar.cc/150?u=55',
+        lex: 420,
+        amount: 3500,
+        days: 12,
+        proposal: "I'm writing my thesis on similar topics. Familiar with the specific inhibitor structures mentioned.",
+        fullProposal: "I have just finished a chapter on this exact inhibitor class. I can highlight the active site residues with high accuracy.",
+        attachments: [],
+        tags: ['Student', 'Domain Knowledge'],
+        stats: {
+            successRate: '100%',
+            completed: 3,
+            rank: 'Rising Star'
+        }
+    },
+    {
+        id: 'b12',
+        name: 'Helix Designs',
+        institution: 'SciComm Studio',
+        email: 'projects@helixdesigns.com',
+        avatar: 'https://i.pravatar.cc/150?u=99',
+        lex: 890,
+        amount: 5000,
+        days: 5,
+        proposal: "Standard commercial license included. We ensure colorblind-safe palettes for all publication figures.",
+        fullProposal: "Accessibility is key for high-impact publications. We check all renders against CVD simulators.",
+        attachments: [],
+        tags: ['Agency', 'Accessibility'],
+        stats: {
+            successRate: '99%',
+            completed: 60,
+            rank: 'Top Rated'
+        }
+    }
+];
 
 export const INITIAL_PROFILE: UserProfile = {
-    name: "Zhang Wei",
-    role: "Associate Professor",
-    institution: "School of Medicine, Tsinghua University",
-    avatar: "https://i.pravatar.cc/300?u=zhangwei",
-    banner: "https://picsum.photos/seed/science_banner/1200/400",
-    bio: "Specializing in Medical Artificial Intelligence and the application of deep learning in medical imaging diagnostics. Dedicated to advancing the innovation and application of AI technologies in precision medicine, with over 50 SCI-indexed publications and leadership in three National Natural Science Foundation of China projects.",
-    joinDate: "Jul, 2020",
-    researchFields: ['Medical AI', 'Deep Learning', 'Precision Medicine', 'Medical Imaging'],
-    subjects: ['Quantum mechanic', 'Introduction to Mathematics'],
-    fieldsOfStudy: ['Medical AI', 'Deep Learning', 'Precision Medicine', 'Medical Imaging']
+    name: 'Dr. Aris Kothari',
+    role: 'Principal Investigator',
+    institution: 'Perimeter Institute',
+    avatar: 'https://i.pravatar.cc/150?u=3',
+    banner: 'https://picsum.photos/1200/400?random=1',
+    bio: 'Leading researcher in quantum biology and neural coherence. Exploring the intersection of quantum mechanics and consciousness through the Orch OR theory. My lab focuses on microtubule resonance.',
+    joinDate: 'Nov, 2023',
+    researchFields: ['Quantum Physics', 'Neuroscience', 'Consciousness'],
+    subjects: ['Physics', 'Biology'],
+    fieldsOfStudy: ['Quantum Biology', 'Neurology'],
+    title: 'Dr.'
 };
 
 export const INITIAL_STORIES: StoryItem[] = [
-    { id: '1', date: 'Nov, 2023', title: 'Published the first selected paper titled "Application of Deep Learning in Medical Image Diagnosis"', description: 'This study proposed a new neural network architecture, which significantly improved the diagnostic accuracy for lung diseases.' },
-    { id: '2', date: 'Jun, 2022', title: 'Obtained the National Natural Science Foundation of China\'s Outstanding Young Investigator Project', description: 'Project Name: Precision Medicine Research Based on Machine Learning' },
-    { id: '3', date: 'Jul, 2020', title: 'Received a Ph.D. in Computer Science from Tsinghua University', description: 'Doctoral Dissertation: "Research on Medical Image Analysis Methods Based on Deep Learning", Supervisor: Professor Zhang San' }
+    { id: '1', date: 'Dec, 2023', title: 'Published in Nature', description: 'Our paper on "Quantum Coherence in Microtubules" was accepted for publication.' },
+    { id: '2', date: 'Nov, 2023', title: 'Joined OpenSci', description: 'Started the journey to decentralized science funding.' },
+    { id: '3', date: 'Oct, 2023', title: 'Research Grant Awarded', description: 'Received a $50k grant from the Future Science Foundation.' }
 ];
 
 export const INITIAL_IDA: IdaArticle[] = [
-    { id: '1', title: 'The Application and Challenges of Deep Learning in Medical Image Diagnosis', description: 'This article systematically reviews the latest advancements of deep learning technology in the field of medical image diagnosis, analyzes the main challenges currently faced, and proposes future research directions.', tags: ['MEDICINE AI'], isFeatured: true, publicationDate: 'Nov, 2023', likes: 234, comments: 45, isPinned: false, isHidden: false },
-    { id: '2', title: 'The Application of Federated Learning in Protecting Privacy of Medical Data', description: 'Introduce how the federated learning technology enables AI model collaboration training among multiple medical institutions while protecting patient privacy.', tags: ['EXPLAINABLE AI'], isFeatured: false, publicationDate: 'Nov, 2023', likes: 234, comments: 45, isPinned: false, isHidden: false },
-    { id: '3', title: 'Deep Learning in Precision Medicine: A Comprehensive Survey', description: 'A deep dive into how AI is revolutionizing personalized treatment plans by analyzing genomic data and medical history with unprecedented accuracy.', tags: ['PRECISION MEDICINE'], isFeatured: false, publicationDate: 'Oct, 2023', likes: 189, comments: 32, isPinned: false, isHidden: false }
+    { id: '1', title: 'The Future of Quantum Biology', description: 'Exploring the implications of quantum effects in biological systems.', tags: ['Physics', 'Biology'], isFeatured: true, publicationDate: '2024-01-15', likes: 120, comments: 45, isPinned: true, isHidden: false },
+    { id: '2', title: 'Decentralized Science: A New Era', description: 'How blockchain can revolutionize research funding and publishing.', tags: ['DeSci', 'Web3'], isFeatured: false, publicationDate: '2023-12-10', likes: 85, comments: 20, isPinned: false, isHidden: false }
 ];
 
 export const INITIAL_REVIEWS: ReviewItem[] = [
-    { id: '1', status: 'PUBLISHED', rating: 4.2, title: 'A new method for protein structure prediction based on Transformer...', description: 'The method proposed in this paper has achieved significant improvements in protein structure prediction. The experimental design is reasonable and the results are convincing.', publicationDate: 'OCT, 2023' },
-    { id: '2', status: 'PUBLISHED', rating: 4.2, title: 'A new method for protein structure prediction based on Transformer', description: 'The method proposed in this paper has achieved significant improvements in protein structure prediction.', publicationDate: 'OCT, 2023' }
+    { id: '1', status: 'Verified', rating: 5, title: 'Excellent Collaborator', description: 'Dr. Kothari provided clear guidance and was very responsive.', publicationDate: '2024-02-01' },
+    { id: '2', status: 'Verified', rating: 4, title: 'Great Insight', description: 'Very knowledgeable in his field.', publicationDate: '2024-01-20' }
+];
+
+export const PROJECTS: Project[] = [
+    {
+        id: '1',
+        title: 'Mycoremediation: Plastic Eating Fungi',
+        shortDescription: 'Developing a new strain of fungi capable of digesting PET plastics in marine environments.',
+        fullDescription: 'Plastic pollution is one of the most pressing environmental issues of our time. This project aims to genetically modify Aspergillus tubingensis to enhance its ability to degrade polyethylene terephthalate (PET). We will conduct controlled experiments to measure degradation rates and identify the enzymes responsible.',
+        category: 'GRANTS',
+        tags: ['Biology', 'Environment', 'Genetics'],
+        status: 'FUNDING',
+        image: 'https://picsum.photos/800/400?random=1',
+        raised: 15000,
+        goal: 50000,
+        backers: 120,
+        daysLeft: 15,
+        author: 'Dr. Aris Kothari',
+        authorAvatar: 'https://i.pravatar.cc/150?u=3',
+        authorBio: 'Expert in mycology and genetic engineering.',
+        institution: 'Perimeter Institute',
+        team: [
+            { name: 'Dr. Aris Kothari', role: 'Lead', institution: 'Perimeter Institute', avatar: 'https://i.pravatar.cc/150?u=3', bio: 'Expert in mycology.', awards: ['Nobel Prize'] },
+            { name: 'Dr. Sarah Lee', role: 'Geneticist', institution: 'MIT', avatar: 'https://i.pravatar.cc/150?u=30', bio: 'Specialist in CRISPR.', awards: [] }
+        ],
+        impactStats: [{ label: 'Plastic Degraded', value: '500kg' }],
+        milestones: [
+            { id: 'm1', title: 'Strain Isolation', description: 'Isolate high-efficiency strains.', date: '2024-01-01', status: 'COMPLETED' },
+            { id: 'm2', title: 'Enzyme Analysis', description: 'Identify key enzymes.', date: '2024-03-01', status: 'IN_PROGRESS' },
+            { id: 'm3', title: 'Field Test', description: 'Test in controlled marine environment.', date: '2024-06-01', status: 'UPCOMING' }
+        ],
+        allocation: [
+            { category: 'Equipment', description: 'Lab bioreactors', amount: 20000, percentage: 40 },
+            { category: 'Personnel', description: 'Research assistants', amount: 20000, percentage: 40 },
+            { category: 'Materials', description: 'Consumables', amount: 10000, percentage: 20 }
+        ],
+        ida: { name: 'MycoDAO', contractAddress: '0x123...abc', ownerAddress: '0x456...def' },
+        donations: [
+            { id: 'd1', donor: 'Alice', amount: 100, date: '2 days ago', avatar: 'https://i.pravatar.cc/150?u=1' },
+            { id: 'd2', donor: 'Bob', amount: 500, date: '5 days ago', avatar: 'https://i.pravatar.cc/150?u=2' }
+        ]
+    },
+    {
+        id: '2',
+        title: 'Atmospheric Aerosol Injection Arrays',
+        shortDescription: 'Testing scalable deployment methods for stratospheric aerosol injection to combat global warming.',
+        fullDescription: 'Solar geoengineering offers a potential stopgap for climate change. This project investigates the feasibility of using high-altitude balloons for the controlled release of sulfate aerosols. We will model dispersion patterns and assess potential side effects on ozone depletion.',
+        category: 'GRANTS',
+        tags: ['Physics', 'Climate', 'Engineering'],
+        status: 'RESEARCH',
+        image: 'https://picsum.photos/800/400?random=2',
+        raised: 75000,
+        goal: 100000,
+        backers: 340,
+        daysLeft: 0,
+        author: 'Dr. Wei Zhang',
+        authorAvatar: 'https://i.pravatar.cc/150?u=4',
+        authorBio: 'Atmospheric physicist specializing in climate engineering.',
+        institution: 'Tsinghua University',
+        team: [],
+        impactStats: [],
+        milestones: [
+            { id: 'm1', title: 'Simulation', description: 'Computer modeling.', date: '2023-12-01', status: 'COMPLETED' },
+            { id: 'm2', title: 'Prototype', description: 'Build balloon payload.', date: '2024-02-01', status: 'IN_PROGRESS' }
+        ],
+        allocation: [],
+        ida: { name: 'GeoEngFund', contractAddress: '0x789...ghi', ownerAddress: '0xabc...jkl' },
+        donations: []
+    },
+    {
+        id: '3',
+        title: 'Quantum Entanglement in Neural Networks',
+        shortDescription: 'Investigating if quantum effects play a non-trivial role in biological neural processing.',
+        fullDescription: 'The Orch OR theory posits that consciousness arises from quantum computations in microtubules. We aim to test this by measuring coherence times in isolated microtubule bundles under physiological conditions. This could revolutionize our understanding of the brain and AI.',
+        category: 'GRANTS',
+        tags: ['Quantum', 'Neuroscience', 'AI'],
+        status: 'PRE_LAUNCH',
+        image: 'https://picsum.photos/800/400?random=3',
+        raised: 0,
+        goal: 250000,
+        backers: 0,
+        daysLeft: 45,
+        startTime: '2024-05-01',
+        author: 'Dr. Aris Kothari',
+        authorAvatar: 'https://i.pravatar.cc/150?u=3',
+        authorBio: 'Leading researcher in quantum biology.',
+        institution: 'Perimeter Institute',
+        team: [],
+        impactStats: [],
+        milestones: [],
+        allocation: [],
+        ida: { name: 'QuantumMind', contractAddress: '0xdef...mno', ownerAddress: '0xghi...pqr' },
+        donations: []
+    }
+];
+
+export const QUESTS: Quest[] = [
+    {
+        id: 'q1',
+        title: 'Heuristic Solution and Experimental Comparison of Convex Optimization Problems',
+        shortDescription: 'Need a solver to implement and benchmark a new heuristic for large-scale convex problems.',
+        fullDescription: 'We are looking for a researcher with strong optimization background to implement a novel heuristic algorithm for solving large-scale convex optimization problems. The task involves coding the algorithm in Python/C++, comparing it with standard solvers (CVXPY, Gurobi) on a provided dataset, and writing a technical report on the convergence properties.',
+        status: 'RECRUITING',
+        tags: ['Math', 'Optimization', 'Python'],
+        subjects: ['Math', 'Computer Science'],
+        reward: { amount: 2000, currency: 'USDC', usdValue: 2000 },
+        endTime: '2024-04-15',
+        deliveryTime: '2024-05-01',
+        bidderCount: 5,
+        bidders: ['https://i.pravatar.cc/150?u=5', 'https://i.pravatar.cc/150?u=6'],
+        author: { name: 'Dr. Aris Kothari', avatar: 'https://i.pravatar.cc/150?u=3', verified: true },
+        commentsCount: 3
+    },
+    {
+        id: 'q2',
+        title: 'High-Fidelity 3D Rendering of Molecular Docking Interactions',
+        shortDescription: 'Create publication-ready 3D visualizations of protein-ligand binding from PDB files.',
+        fullDescription: 'We need a 3D artist or structural biologist to create high-resolution renders of a new drug candidate binding to its target protein. We will provide PDB files. Deliverables include 5 still images (4K) and a 30-second animation showing the conformational change upon binding. Must use PyMOL, ChimeraX, or Blender.',
+        status: 'IN_PROGRESS',
+        tags: ['Biology', 'Visualization', '3D'],
+        subjects: ['Biology', 'Art'],
+        reward: { amount: 1500, currency: 'USDC', usdValue: 1500 },
+        endTime: '2024-03-30',
+        deliveryTime: '2024-04-10',
+        bidderCount: 12,
+        bidders: ['https://i.pravatar.cc/150?u=7', 'https://i.pravatar.cc/150?u=8', 'https://i.pravatar.cc/150?u=9'],
+        author: { name: 'Dr. Sarah Lin', avatar: 'https://i.pravatar.cc/150?u=30', verified: true },
+        commentsCount: 8
+    },
+    {
+        id: 'q3',
+        title: 'Systematic Literature Review on Algae-Based Biofuels',
+        shortDescription: 'Conduct a comprehensive review of peer-reviewed papers from 2020-2024.',
+        fullDescription: 'Looking for a researcher to perform a systematic literature review on the efficiency of genetically modified algae for biofuel production. The review should cover extraction methods, lipid yields, and scalability. The output should be a structured report summarizing key findings and identifying research gaps.',
+        status: 'COMPLETED',
+        tags: ['Energy', 'Biology', 'Research'],
+        subjects: ['Biology', 'Environmental Science'],
+        reward: { amount: 800, currency: 'USDC', usdValue: 800 },
+        endTime: '2024-02-28',
+        deliveryTime: '2024-03-15',
+        bidderCount: 8,
+        bidders: ['https://i.pravatar.cc/150?u=10'],
+        author: { name: 'GreenEnergy Lab', avatar: 'https://i.pravatar.cc/150?u=40', verified: false },
+        commentsCount: 2
+    },
+    // Missing Quests from Workspace
+    {
+        id: 'q4',
+        title: 'Parallelization of Monte Carlo Simulations for Particle Physics',
+        shortDescription: 'Optimize and parallelize an existing Monte Carlo simulation code for high-energy physics collisions.',
+        fullDescription: 'We require a computational physicist or HPC expert to optimize our legacy Fortran/C++ codebase. The goal is to implement MPI/OpenMP parallelization to scale the simulation up to 1000 cores on our cluster. Deliverables include the optimized source code and a performance benchmark report.',
+        status: 'RECRUITING', // Actually Rejected in workspace but Quest itself is open/closed
+        tags: ['Physics', 'HPC', 'C++'],
+        subjects: ['Physics', 'Computer Science'],
+        reward: { amount: 500000, currency: 'SCI', usdValue: 50000 },
+        endTime: '2024-05-20',
+        deliveryTime: '2024-06-30',
+        bidderCount: 2,
+        bidders: ['https://i.pravatar.cc/150?u=15', 'https://i.pravatar.cc/150?u=16'],
+        author: { name: 'CERN Atlas Group', avatar: 'https://i.pravatar.cc/150?u=55', verified: true },
+        commentsCount: 5
+    },
+    {
+        id: '105',
+        title: 'Visualizing Protein Folding with AI',
+        shortDescription: 'Create an explainer video and 3D visualization of AlphaFold predictions for a general audience.',
+        fullDescription: 'We are looking for a scientific communicator and 3D artist to create a visual package explaining how AI predicts protein folding. The output will be used in an educational documentary. You will work with our raw AlphaFold data output.',
+        status: 'RECRUITING',
+        tags: ['AI', 'Biology', 'Education'],
+        subjects: ['Biology', 'Computer Science', 'Art'],
+        reward: { amount: 1500, currency: 'USDC', usdValue: 1500 },
+        endTime: '2024-04-25',
+        deliveryTime: '2024-05-10',
+        bidderCount: 15,
+        bidders: ['https://i.pravatar.cc/150?u=20', 'https://i.pravatar.cc/150?u=21'],
+        author: { name: 'DeepMind Edu', avatar: 'https://i.pravatar.cc/150?u=60', verified: true },
+        commentsCount: 12
+    },
+    {
+        id: '104',
+        title: 'Translation of Biophysics Paper',
+        shortDescription: 'Translate a technical biophysics paper from Mandarin to English for publication.',
+        fullDescription: 'Looking for a bilingual researcher with a background in biophysics to translate a 15-page manuscript. Accuracy of technical terminology is paramount.',
+        status: 'COMPLETED',
+        tags: ['Translation', 'Biophysics'],
+        subjects: ['Physics', 'Biology'],
+        reward: { amount: 200, currency: 'USDC', usdValue: 200 },
+        endTime: '2024-01-10',
+        deliveryTime: '2024-01-20',
+        bidderCount: 3,
+        bidders: [],
+        author: { name: 'Prof. Li', avatar: 'https://i.pravatar.cc/150?u=61', verified: false },
+        commentsCount: 0
+    },
+    {
+        id: '202',
+        title: 'Data Analysis for Ocean Acidification Study',
+        shortDescription: 'Analyze large dataset of ocean pH levels and correlate with marine biodiversity metrics.',
+        fullDescription: 'We have 5 years of sensor data from the Pacific Ocean. We need a data scientist to clean the data, perform time-series analysis, and visualize correlations with local biodiversity counts.',
+        status: 'RECRUITING',
+        tags: ['Data Science', 'Environment', 'Statistics'],
+        subjects: ['Environmental Science', 'Statistics'],
+        reward: { amount: 800, currency: 'USDC', usdValue: 800 },
+        endTime: '2024-04-05',
+        deliveryTime: '2024-04-20',
+        bidderCount: 6,
+        bidders: ['https://i.pravatar.cc/150?u=70'],
+        author: { name: 'Ocean Cleanup', avatar: 'https://i.pravatar.cc/150?u=71', verified: true },
+        commentsCount: 4
+    },
+    {
+        id: '203',
+        title: 'Smart Contract Audit for Research DAO',
+        shortDescription: 'Security audit for a new governance contract for a DeSci DAO.',
+        fullDescription: 'We need a certified smart contract auditor to review our GovernorBravo fork. Focus on reentrancy vulnerabilities and governance attack vectors.',
+        status: 'IN_PROGRESS',
+        tags: ['Blockchain', 'Security', 'Solidity'],
+        subjects: ['Computer Science'],
+        reward: { amount: 4500, currency: 'USDC', usdValue: 4500 },
+        endTime: '2024-03-25',
+        deliveryTime: '2024-04-05',
+        bidderCount: 4,
+        bidders: ['https://i.pravatar.cc/150?u=80'],
+        author: { name: 'ResearchDAO', avatar: 'https://i.pravatar.cc/150?u=81', verified: true },
+        commentsCount: 2
+    },
+    {
+        id: 'm4',
+        title: 'Autonomous Drone Swarm Navigation',
+        shortDescription: 'Develop pathfinding algorithms for a swarm of drones in a cluttered environment.',
+        fullDescription: 'Seeking robotics engineers to develop decentralized path planning for drone swarms. Must simulate in Gazebo/ROS.',
+        status: 'IN_PROGRESS',
+        tags: ['Robotics', 'AI', 'Control Systems'],
+        subjects: ['Engineering', 'Computer Science'],
+        reward: { amount: 65000, currency: 'SCI', usdValue: 6500 },
+        endTime: '2024-06-01',
+        deliveryTime: '2024-08-01',
+        bidderCount: 9,
+        bidders: ['https://i.pravatar.cc/150?u=90'],
+        author: { name: 'SkyNet Labs', avatar: 'https://i.pravatar.cc/150?u=91', verified: true },
+        commentsCount: 10
+    }
 ];

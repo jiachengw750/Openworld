@@ -1,61 +1,19 @@
 
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, CheckCircle, Clock, DollarSign, Star, User, MessageSquare, Shield, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Clock, DollarSign, Star, User, MessageSquare, Shield, ChevronDown, ChevronUp, Building2, Trophy, Activity, Briefcase } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 import { PasswordVerificationModal } from '../components/modals/PasswordVerificationModal';
-
-// Mock Bidders Data
-const MOCK_BIDDERS = [
-    {
-        id: 'b1',
-        name: 'Dr. Sarah Lin',
-        avatar: 'https://i.pravatar.cc/150?u=30',
-        lex: 890,
-        amount: 4800,
-        days: 7,
-        proposal: "I have extensive experience with molecular rendering using Blender and PyMOL. I can deliver 4K renders and a 60fps animation. See my portfolio for similar protein docking visualizations.",
-        tags: ['Expert', 'Top Rated']
-    },
-    {
-        id: 'b2',
-        name: 'James Chen',
-        avatar: 'https://i.pravatar.cc/150?u=12',
-        lex: 720,
-        amount: 4500,
-        days: 10,
-        proposal: "I propose using a custom Python script to automate the frame generation from GROMACS trajectories, ensuring 100% accuracy in atomic positions.",
-        tags: ['Fast Response']
-    },
-    {
-        id: 'b3',
-        name: 'BioVis Studio',
-        avatar: 'https://i.pravatar.cc/150?u=50',
-        lex: 650,
-        amount: 5000,
-        days: 5,
-        proposal: "We are a team of scientific illustrators. We can prioritize this task and deliver within 5 days. Includes 2 rounds of revisions.",
-        tags: ['Team']
-    },
-    {
-        id: 'b4',
-        name: 'Alex Rivera',
-        avatar: 'https://i.pravatar.cc/150?u=60',
-        lex: 450,
-        amount: 4200,
-        days: 12,
-        proposal: "Recent grad with strong skills in Maya. Offering a lower rate to build my reputation on OpenSci.",
-        tags: ['New']
-    }
-];
+import { MOCK_BIDDERS } from '../constants'; // Import shared data
 
 export const QuestSelection: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { showToast } = useToast();
     
+    // Local state for immediate selection if needed, though mostly handled in details page now
+    // We can keep quick select or just rely on the details page
     const [selectedBidderId, setSelectedBidderId] = useState<string | null>(null);
-    const [expandedBidderId, setExpandedBidderId] = useState<string | null>(null);
     const [isPasswordOpen, setIsPasswordOpen] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
 
@@ -68,26 +26,10 @@ export const QuestSelection: React.FC = () => {
         bidsCount: 12
     };
 
-    const handleSelect = (bidderId: string) => {
-        setSelectedBidderId(bidderId);
-        setIsPasswordOpen(true);
-    };
-
-    const handleConfirmSelection = () => {
-        setIsPasswordOpen(false);
-        setIsProcessing(true);
-        
-        // Simulate On-Chain Transaction
-        setTimeout(() => {
-            setIsProcessing(false);
-            showToast("Bidder selected successfully. Project started.");
-            navigate('/workspace'); 
-        }, 2000);
-    };
-
-    const toggleExpand = (id: string, e: React.MouseEvent) => {
-        e.stopPropagation();
-        setExpandedBidderId(expandedBidderId === id ? null : id);
+    // Quick select handler (optional, but good to keep if user wants to bypass details)
+    // For now, let's make the whole card clickable to go to details
+    const handleCardClick = (bidderId: string) => {
+        navigate(`/workspace/quest/${id}/selection/${bidderId}`);
     };
 
     const formatCurrency = (amount: number) => {
@@ -138,111 +80,77 @@ export const QuestSelection: React.FC = () => {
             </div>
 
             {/* Bidders List */}
-            <div className="max-w-[1000px] mx-auto px-6 md:px-12 mt-12">
-                <h2 className="font-mono text-sm font-bold uppercase tracking-widest text-ink/60 mb-6">
-                    Review Proposals ({MOCK_BIDDERS.length})
-                </h2>
+            <div className="max-w-[1000px] mx-auto px-6 md:px-12 mt-12 space-y-6">
+                
+                {/* Sort / Filter Bar */}
+                <div className="flex justify-between items-center pb-4 border-b border-ink/10">
+                    <span className="text-xs font-mono font-bold uppercase tracking-widest text-ink/40">Applicant Ranking</span>
+                    <div className="flex gap-4">
+                        <button className="text-xs font-mono font-bold uppercase text-ink hover:text-accent flex items-center gap-1">
+                            Lex Score <ChevronDown size={12}/>
+                        </button>
+                        <button className="text-xs font-mono font-bold uppercase text-ink/40 hover:text-ink flex items-center gap-1">
+                            Bid Amount <ChevronDown size={12}/>
+                        </button>
+                    </div>
+                </div>
 
-                <div className="space-y-6">
-                    {MOCK_BIDDERS.map((bidder) => (
-                        <div 
-                            key={bidder.id} 
-                            className={`bg-paper border transition-all duration-300 rounded-sm relative group ${
-                                selectedBidderId === bidder.id 
-                                ? 'border-accent ring-1 ring-accent' 
-                                : 'border-ink/10 hover:border-ink/30 hover:shadow-sm'
-                            }`}
-                        >
-                            <div className="p-6 md:p-8 flex flex-col md:flex-row gap-6">
-                                
-                                {/* Avatar & Basic Info */}
-                                <div className="flex items-start gap-4 md:w-1/4 min-w-[200px]">
-                                    <img src={bidder.avatar} alt={bidder.name} className="w-12 h-12 rounded-full border border-ink/10 object-cover" />
-                                    <div>
-                                        <h3 className="font-bold text-lg text-ink leading-tight">{bidder.name}</h3>
-                                        <div className="flex items-center gap-2 mt-1">
-                                            <div className="flex items-center text-xs font-mono font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-100">
-                                                <Star size={10} className="mr-1 fill-current" />
-                                                LEX {bidder.lex}
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-wrap gap-1 mt-2">
-                                            {bidder.tags.map(tag => (
-                                                <span key={tag} className="text-[9px] font-mono text-ink/50 bg-stone/5 px-2 py-0.5 rounded-sm border border-ink/5 uppercase">
-                                                    {tag}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
+                {MOCK_BIDDERS.map((bidder, index) => (
+                    <div 
+                        key={bidder.id}
+                        className={`bg-paper border transition-all duration-300 group overflow-hidden border-ink/10 hover:border-ink/30 hover:shadow-sm rounded-sm cursor-pointer`}
+                        onClick={() => handleCardClick(bidder.id)}
+                    >
+                        {/* Compact Row */}
+                        <div className="p-6 flex flex-col md:flex-row items-start md:items-center gap-6">
+                            
+                            {/* Rank & Avatar */}
+                            <div className="flex items-center gap-4 min-w-[200px]">
+                                <span className="font-mono text-ink/20 font-bold text-lg w-6">#{index + 1}</span>
+                                <img src={bidder.avatar} alt={bidder.name} className="w-12 h-12 rounded-full object-cover border border-ink/10" />
+                                <div>
+                                    <h4 className="font-bold text-ink text-sm flex items-center gap-2">
+                                        {bidder.name}
+                                        {bidder.lex > 800 && <Shield size={12} className="text-blue-500 fill-current" />}
+                                    </h4>
+                                    <span className="text-xs text-ink/50 font-mono">{bidder.institution}</span>
                                 </div>
+                            </div>
 
-                                {/* Proposal Snippet */}
-                                <div className="flex-1">
-                                    <div className="mb-4">
-                                        <span className="text-[10px] font-mono font-bold uppercase text-ink/40 mb-1 block">Proposal</span>
-                                        <p className={`text-sm text-ink/80 leading-relaxed ${expandedBidderId === bidder.id ? '' : 'line-clamp-2'}`}>
-                                            {bidder.proposal}
-                                        </p>
-                                        {bidder.proposal.length > 100 && (
-                                            <button 
-                                                onClick={(e) => toggleExpand(bidder.id, e)}
-                                                className="text-[10px] font-bold text-ink/40 hover:text-ink mt-1 flex items-center gap-1 uppercase tracking-wide"
-                                            >
-                                                {expandedBidderId === bidder.id ? (
-                                                    <>Show Less <ChevronUp size={10} /></>
-                                                ) : (
-                                                    <>Read More <ChevronDown size={10} /></>
-                                                )}
-                                            </button>
-                                        )}
-                                    </div>
+                            {/* Tags */}
+                            <div className="flex-1 flex flex-wrap gap-2">
+                                {bidder.tags.map((tag, i) => (
+                                    <span key={i} className="px-2 py-1 bg-stone/5 border border-ink/5 rounded-sm text-[10px] font-mono font-bold text-ink/60 uppercase">
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+
+                            {/* Stats */}
+                            <div className="flex items-center gap-8 text-right min-w-[200px] justify-between md:justify-end">
+                                <div>
+                                    <span className="block text-[10px] font-mono text-ink/40 uppercase font-bold">Lex Score</span>
+                                    <span className="font-bold text-ink font-mono text-lg">{bidder.lex}</span>
                                 </div>
-
-                                {/* Quote & Actions */}
-                                <div className="md:w-1/4 flex flex-col items-end justify-between border-l border-ink/5 md:pl-6 min-w-[180px]">
-                                    <div className="text-right mb-4">
-                                        <span className="block text-[10px] font-mono font-bold uppercase text-ink/40 mb-1">Quote</span>
-                                        <div className="flex items-center justify-end gap-1 font-mono text-xl font-bold text-ink">
-                                            {formatCurrency(bidder.amount)}
-                                            <span className="text-xs text-ink/40 font-normal mt-1">USDC</span>
-                                        </div>
-                                        <span className="text-xs font-mono text-ink/60 font-bold block mt-1">
-                                            {bidder.days} Days
-                                        </span>
-                                    </div>
-
-                                    <div className="flex gap-2 w-full">
-                                        <button className="p-2 rounded-full border border-ink/10 text-ink/60 hover:text-ink hover:bg-stone/5 transition-colors">
-                                            <MessageSquare size={18} />
-                                        </button>
-                                        <button 
-                                            onClick={() => handleSelect(bidder.id)}
-                                            className="flex-1 bg-ink text-paper py-2 rounded-full font-mono text-xs font-bold uppercase tracking-widest hover:bg-accent transition-colors shadow-sm"
-                                        >
-                                            Select
-                                        </button>
-                                    </div>
+                                <div>
+                                    <span className="block text-[10px] font-mono text-ink/40 uppercase font-bold">Bid</span>
+                                    <span className="font-bold text-ink font-mono text-lg">{formatCurrency(bidder.amount)}</span>
+                                </div>
+                                <div className="hidden md:block text-ink/20 group-hover:text-ink/60 transition-colors">
+                                    <ArrowLeft className="rotate-180" size={16}/>
                                 </div>
                             </div>
                         </div>
-                    ))}
-                </div>
-            </div>
-
-            {isProcessing && (
-                <div className="fixed inset-0 z-[80] flex items-center justify-center bg-paper/80 backdrop-blur-sm">
-                    <div className="flex flex-col items-center">
-                        <div className="w-12 h-12 border-4 border-ink/10 border-t-accent rounded-full animate-spin mb-4"></div>
-                        <p className="font-mono text-sm font-bold uppercase tracking-widest text-ink">Confirming Selection...</p>
+                        
+                        {/* Short Proposal Snippet */}
+                        <div className="px-6 pb-6 pt-0">
+                             <div className="bg-stone/5 p-4 rounded-sm border border-ink/5">
+                                 <p className="text-sm text-ink/60 line-clamp-1 italic">"{bidder.proposal}"</p>
+                             </div>
+                        </div>
                     </div>
-                </div>
-            )}
-
-            <PasswordVerificationModal 
-                isOpen={isPasswordOpen}
-                onClose={() => setIsPasswordOpen(false)}
-                onVerified={handleConfirmSelection}
-            />
+                ))}
+            </div>
         </div>
     );
 };

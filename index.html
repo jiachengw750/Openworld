@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" class="light">
   <head>
@@ -83,6 +84,16 @@
       }
       ::-webkit-scrollbar-thumb:hover {
         background: rgb(var(--color-accent));
+      }
+
+      /* Hide number input spinners - Added per request */
+      input[type=number]::-webkit-inner-spin-button, 
+      input[type=number]::-webkit-outer-spin-button { 
+        -webkit-appearance: none; 
+        margin: 0; 
+      }
+      input[type=number] {
+        -moz-appearance: textfield;
       }
     </style>
   <script type="importmap">
