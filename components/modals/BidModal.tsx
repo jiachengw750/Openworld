@@ -326,7 +326,7 @@ export const BidModal: React.FC<BidModalProps> = ({ isOpen, onClose, questTitle,
                                 </div>
                                 <div className="flex items-center gap-2 text-sm text-ink/60 font-mono">
                                     <CheckCircle size={14} className="text-green-600" />
-                                    <span>Reputation Score > 500</span>
+                                    <span>Reputation Score &gt; 500</span>
                                 </div>
                                 <div className="flex items-center gap-2 text-sm text-ink/60 font-mono">
                                     <CheckCircle size={14} className="text-green-600" />
